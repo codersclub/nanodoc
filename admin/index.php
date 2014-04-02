@@ -30,102 +30,102 @@ $nd_mysql->checkDatabase(); ?>
         <![endif]-->
     </head>
     <body>
-		<header id="admin-header" class="navbar navbar-default navbar-static-top">
-			<div class="container">	
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-				</div>
-				<div id="top-collapse" class="navbar-collapse collapse">
-					<ul class="nav">
-						<li class="admin-title navbar-left">
-							<span class="glyphicon glyphicon-home"></span>
-							<p><a href="<?php echo $nd_mysql->getOptions('nd_url'); ?>"><?php echo $nd_mysql->getOptions('nd_title'); ?></a></p>
-						</li>
-						<li class="admin-page-name">
-							<span class="glyphicon glyphicon-cog"></span>
-							<p><a href="index.php">Nanodoc Dashboard</a></p>
-						</li>
-						<ul class="admin-welcome nav navbar-nav navbar-right">
-							<li class="dropdown">
-								<span class="glyphicon glyphicon-user"></span><br>
-								Welcome, 
-								<a href="#" data-toggle="dropdown" class="dropdown-toggle">						
-							    	<?php echo $_SESSION['login']; ?>
-							    	<span class="caret"></span>
-							    </a>
-							    <ul class="dropdown-menu dropdown-menu-left">
-									<li><a href="user.php">Account</a></li>
-									<li><a href="#">Settings</a></li>
-								</ul>
-							</li>
-						</ul>	
-					</ul>		
-				</div>
-			</div>
-		</header>
+        <header id="admin-header" class="navbar navbar-default navbar-static-top">
+            <div class="container"> 
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div id="top-collapse" class="navbar-collapse collapse">
+                    <ul class="nav">
+                        <li class="admin-title navbar-left">
+                            <span class="glyphicon glyphicon-home"></span>
+                            <p><a href="<?php echo $nd_mysql->getOptions('nd_url'); ?>"><?php echo $nd_mysql->getOptions('nd_title'); ?></a></p>
+                        </li>
+                        <li class="admin-page-name">
+                            <span class="glyphicon glyphicon-cog"></span>
+                            <p><a href="index.php">Nanodoc Dashboard</a></p>
+                        </li>
+                        <ul class="admin-welcome nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <span class="glyphicon glyphicon-user"></span><br>
+                                Welcome, 
+                                <a href="#" data-toggle="dropdown" class="dropdown-toggle">                     
+                                    <?php echo $_SESSION['login']; ?>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-left">
+                                    <li><a href="user.php">Account</a></li>
+                                    <li><a href="#">Settings</a></li>
+                                </ul>
+                            </li>
+                        </ul>   
+                    </ul>       
+                </div>
+            </div>
+        </header>
 
-		<?php if (isset($_GET['action']) && $_GET['action']=='delete') {
-			$deleted = $nd_mysql->deletePage($_GET['p']);
-		} ?>
+        <?php if (isset($_GET['action']) && $_GET['action']=='delete') {
+            $deleted = $nd_mysql->deletePage($_GET['p']);
+        } ?>
 
-		<section id="admin-content">
-			<div id="pages" class="panel panel-primary">
-				<div class="panel-heading">Your pages</div>
-				<div class="panel-body">
+        <section id="admin-content">
+            <div id="pages" class="panel panel-primary">
+                <div class="panel-heading">Your pages</div>
+                <div class="panel-body">
 
-					<?php if (!empty($deleted)) { ?>
+                    <?php if (!empty($deleted)) { ?>
 
-						<div class="alert alert-success alert-dismissable">
-							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-							<p>Page deleted</p>
-						</div>
+                        <div class="alert alert-success alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <p>Page deleted</p>
+                        </div>
 
-					<?php } ?>
+                    <?php } ?>
 
-					<div class="table-responsive">
+                    <div class="table-responsive">
 
-						<table class="table">
-							<thead>
-								<tr>
-									<th>Title</th>
-									<th>Author</th>
-									<th>Date</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-							<?php 
-							$pages = $nd_mysql->getPagesInfo();
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php 
+                            $pages = $nd_mysql->getPagesInfo();
 
-							if($pages) {
-								foreach ($pages as $page) { ?>
-									<tr>
-										<td><?php echo $page['page_name']; ?></td>
-										<td><?php echo $page['user_login']; ?></td>
-										<td><?php echo $page['page_date']; ?></td>
-										<td>
-											<a href="<?php echo $page['page_url']; ?>" class="btn btn-primary btn-xs">View</a>
-											<a href="edit.php?p=<?php echo $page['page_id']; ?>" class='btn btn-primary btn-xs'>Edit</a> 
-											<a href="index.php?p=<?php echo $page['page_id']; ?>&action=delete" class='btn btn-primary btn-xs'>Delete</a></td>
-										</td>
-									</tr>
-								<?php }
-							} ?>
+                            if($pages) {
+                                foreach ($pages as $page) { ?>
+                                    <tr>
+                                        <td><?php echo $page['page_name']; ?></td>
+                                        <td><?php echo $page['user_login']; ?></td>
+                                        <td><?php echo $page['page_date']; ?></td>
+                                        <td>
+                                            <a href="<?php echo $page['page_url']; ?>" class="btn btn-primary btn-xs">View</a>
+                                            <a href="edit.php?p=<?php echo $page['page_id']; ?>" class='btn btn-primary btn-xs'>Edit</a> 
+                                            <a href="index.php?p=<?php echo $page['page_id']; ?>&action=delete" class='btn btn-primary btn-xs'>Delete</a></td>
+                                        </td>
+                                    </tr>
+                                <?php }
+                            } ?>
 
-							</tbody>
-						</table>
-					</div>
-					<div id="new-page-button"><a href='edit.php' class='btn btn-primary btn-xs'>Add new page</a></div>
-				</div>
-			</div>
-			<div id="users"></div>
-		</section>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="new-page-button"><a href='edit.php' class='btn btn-primary btn-xs'>Add new page</a></div>
+                </div>
+            </div>
+            <div id="users"></div>
+        </section>
 
-        		
+                
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->

@@ -30,107 +30,107 @@ $nd_mysql->checkDatabase(); ?>
         <![endif]-->
     </head>
     <body>
-		<header id="admin-header" class="navbar navbar-default navbar-static-top">
-			<div class="container">	
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-				</div>
-				<div id="top-collapse" class="navbar-collapse collapse">
-					<ul class="nav">
-						<li class="admin-title navbar-left">
-							<span class="glyphicon glyphicon-home"></span>
-							<p><a href="<?php echo $nd_mysql->getOptions('nd_url'); ?>"><?php echo $nd_mysql->getOptions('nd_title'); ?></a></p>
-						</li>
-						<li class="admin-page-name">
-							<span class="glyphicon glyphicon-cog"></span>
-							<p><a href="index.php">Nanodoc Dashboard</a></p>
-						</li>
-						<ul class="admin-welcome nav navbar-nav navbar-right">
-							<li class="dropdown">
-								<span class="glyphicon glyphicon-user"></span><br>
-								Welcome, 
-								<a href="#" data-toggle="dropdown" class="dropdown-toggle">						
-							    	<?php echo $_SESSION['login'];?>
-							    	<span class="caret"></span>
-							    </a>
-							    <ul class="dropdown-menu dropdown-menu-left">
-									<li><a href="#">Account</a></li>
-									<li><a href="#">Settings</a></li>
-								</ul>
-							</li>
-						</ul>	
-					</ul>		
-				</div>
-			</div>
-		</header>
+        <header id="admin-header" class="navbar navbar-default navbar-static-top">
+            <div class="container"> 
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div id="top-collapse" class="navbar-collapse collapse">
+                    <ul class="nav">
+                        <li class="admin-title navbar-left">
+                            <span class="glyphicon glyphicon-home"></span>
+                            <p><a href="<?php echo $nd_mysql->getOptions('nd_url'); ?>"><?php echo $nd_mysql->getOptions('nd_title'); ?></a></p>
+                        </li>
+                        <li class="admin-page-name">
+                            <span class="glyphicon glyphicon-cog"></span>
+                            <p><a href="index.php">Nanodoc Dashboard</a></p>
+                        </li>
+                        <ul class="admin-welcome nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <span class="glyphicon glyphicon-user"></span><br>
+                                Welcome, 
+                                <a href="#" data-toggle="dropdown" class="dropdown-toggle">                     
+                                    <?php echo $_SESSION['login'];?>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-left">
+                                    <li><a href="#">Account</a></li>
+                                    <li><a href="#">Settings</a></li>
+                                </ul>
+                            </li>
+                        </ul>   
+                    </ul>       
+                </div>
+            </div>
+        </header>
 
-		<section id="edit-page">
-			<div class="panel panel-primary">
+        <section id="edit-page">
+            <div class="panel panel-primary">
 
-				<?php if(isset($_GET['p'])) { ?>
+                <?php if(isset($_GET['p'])) { ?>
 
-				<div class="panel-heading">Edit Your Page</div>
-				<div class="panel-body">
+                <div class="panel-heading">Edit Your Page</div>
+                <div class="panel-body">
 
-					<?php if (isset($_GET['action']) && isset($_POST['page_title']) && isset($_POST['page_content']) && $_GET['action']=='edit') {
-						$edited = $nd_mysql->editPage($_GET['p'], $_POST['page_title'], $_POST['page_content']);
-					} ?>
+                    <?php if (isset($_GET['action']) && isset($_POST['page_title']) && isset($_POST['page_content']) && $_GET['action']=='edit') {
+                        $edited = $nd_mysql->editPage($_GET['p'], $_POST['page_title'], $_POST['page_content']);
+                    } ?>
 
-					<?php if (!empty($edited)) { ?>
+                    <?php if (!empty($edited)) { ?>
 
-						<div class="alert alert-success alert-dismissable">
-							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-							<p>Page updated</p>
-						</div>
+                        <div class="alert alert-success alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <p>Page updated</p>
+                        </div>
 
-					<?php } ?>
+                    <?php } ?>
 
-					<form action="edit.php?p=<?php echo $_GET['p']; ?>&action=edit" method="post">
+                    <form action="edit.php?p=<?php echo $_GET['p']; ?>&action=edit" method="post">
 
-						<?php $page = $nd_mysql->getPage($_GET['p']); ?>
+                        <?php $page = $nd_mysql->getPage($_GET['p']); ?>
 
-						<h4>Page Title</h4>
-						<input type="text" class="form-control" name="page_title" placeholder="Title" value="<?php echo $page['page_name'] ?>">
-						<h4>Page Content</h4>
-						<textarea name="page_content" cols="30" rows="10" class="form-control"><?php echo $page['page_content']; ?></textarea>
-						<button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
-					</form>
-				</div>
+                        <h4>Page Title</h4>
+                        <input type="text" class="form-control" name="page_title" placeholder="Title" value="<?php echo $page['page_name'] ?>">
+                        <h4>Page Content</h4>
+                        <textarea name="page_content" cols="30" rows="10" class="form-control"><?php echo $page['page_content']; ?></textarea>
+                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                    </form>
+                </div>
 
-				<?php } else { ?>
+                <?php } else { ?>
 
-				<div class="panel-heading">Add New Page</div>
-				<div class="panel-body">
+                <div class="panel-heading">Add New Page</div>
+                <div class="panel-body">
 
-				<?php if (isset($_POST['page_title']) && isset($_POST['page_content'])) { 
-					$created = $nd_mysql->addPage($_POST['page_title'], $_POST['page_content'], $_SESSION['login']);
-				} ?>
+                <?php if (isset($_POST['page_title']) && isset($_POST['page_content'])) { 
+                    $created = $nd_mysql->addPage($_POST['page_title'], $_POST['page_content'], $_SESSION['login']);
+                } ?>
 
-				<?php if (!empty($created)) { ?>
+                <?php if (!empty($created)) { ?>
 
-					<div class="alert alert-success alert-dismissable">
-						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						<p>Page created</p>
-					</div>
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <p>Page created</p>
+                    </div>
 
-				<?php } ?>
+                <?php } ?>
 
-					<form action="edit.php" method="post">
-						<h4>Page Title</h4>
-						<input type="text" class="form-control" name="page_title" placeholder="Title" value="">
-						<h4>Page Content</h4>
-						<textarea name="page_content" cols="30" rows="10" class="form-control"></textarea>
-						<button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
-					</form>
-				</div>
+                    <form action="edit.php" method="post">
+                        <h4>Page Title</h4>
+                        <input type="text" class="form-control" name="page_title" placeholder="Title" value="">
+                        <h4>Page Content</h4>
+                        <textarea name="page_content" cols="30" rows="10" class="form-control"></textarea>
+                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                    </form>
+                </div>
 
-				<?php } ?>
+                <?php } ?>
 
-		</section>
+        </section>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
