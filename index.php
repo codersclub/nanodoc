@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php 
 require_once 'admin/nd_class_db.php';
 $nd_mysql = new nd_db;
@@ -33,3 +34,8 @@ $nd_mysql = new nd_db;
         <script src="js/bootstrap.min.js"></script>
     </body>
 </html>
+=======
+<?php require_once 'header.php' ?>
+
+<?php require_once 'footer.php' ?>
+>>>>>>> 70ad0c8484e079934735841ab87b29ee6f982bac
