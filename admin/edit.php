@@ -15,12 +15,12 @@ $nd_mysql->checkDatabase(); ?>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?php echo 'Edit Page &rsaquo; ' . $nd_mysql->getOptions('nd_title'); ?></title>
+        <title><?php echo 'Edit Page &rsaquo; ' . $nd_mysql->getOption('nd_title'); ?></title>
 
         <!-- Bootstrap -->
-        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
         <!-- NannoDoc custom css -->
-        <link rel="stylesheet" href="../css/custom-style.css">
+        <link rel="stylesheet" href="css/custom-style.css">
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -42,7 +42,7 @@ $nd_mysql->checkDatabase(); ?>
                     <ul class="nav">
                         <li class="admin-title navbar-left">
                             <span class="glyphicon glyphicon-home"></span>
-                            <p><a href="<?php echo $nd_mysql->getOptions('nd_url'); ?>"><?php echo $nd_mysql->getOptions('nd_title'); ?></a></p>
+                            <p><a href="<?php echo $nd_mysql->getOption('nd_url'); ?>"><?php echo $nd_mysql->getOption('nd_title'); ?></a></p>
                         </li>
                         <li class="admin-page-name">
                             <span class="glyphicon glyphicon-cog"></span>
@@ -57,8 +57,9 @@ $nd_mysql->checkDatabase(); ?>
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-left">
-                                    <li><a href="#">Account</a></li>
-                                    <li><a href="#">Settings</a></li>
+                                    <li><a href="user.php">Account</a></li>
+                                    <li><a href="settins.php">Settings</a></li>
+                                    <li><a href="index.php?action=logout">Logout</a></li>
                                 </ul>
                             </li>
                         </ul>   
@@ -133,6 +134,6 @@ $nd_mysql->checkDatabase(); ?>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="../js/bootstrap.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
     </body>
 </html>
