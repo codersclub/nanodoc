@@ -1,5 +1,6 @@
 <?php
-require_once 'nd_functions.php'; 
+require_once 'nd_functions.php';
+
 check_login_session();
 
 require_once 'nd_class_db.php';
@@ -14,7 +15,7 @@ $nd_mysql->checkDatabase(); ?>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?php echo $nd_mysql->getOption('nd_title') . ' &rsaquo; Administration'; ?></title>
+        <title><?php echo $nd_mysql->getOptions('nd_title') . ' &rsaquo; Administration'; ?></title>
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -27,7 +28,6 @@ $nd_mysql->checkDatabase(); ?>
           <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body>
         <header id="admin-header" class="navbar navbar-default navbar-static-top">
             <div class="container"> 
                 <div class="navbar-header">
@@ -57,7 +57,7 @@ $nd_mysql->checkDatabase(); ?>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-left">
                                     <li><a href="user.php">Account</a></li>
-                                    <li><a href="settings.php">Settings</a></li>
+                                    <li><a href="settins.php">Settings</a></li>
                                     <li><a href="index.php?action=logout">Logout</a></li>
                                 </ul>
                             </li>
@@ -66,69 +66,66 @@ $nd_mysql->checkDatabase(); ?>
                 </div>
             </div>
         </header>
-        
-        <?php if (isset($_GET['action']) && $_GET['action']=='logout') {
-            end_login_session();
-        } ?>
-    
-        <?php if (isset($_GET['action']) && $_GET['action']=='delete') {
-            $deleted = $nd_mysql->deletePage($_GET['p']);
-        } ?>
 
-        <section id="admin-content">
+
+        <section id="user-account">
             <div id="pages" class="panel panel-primary">
-                <div class="panel-heading">Your pages</div>
+                <div class="panel-heading">Your Settings</div>
                 <div class="panel-body">
 
-                    <?php if (!empty($deleted)) { ?>
+                <?php if (isset($_GET['action']) && isset($_POST['nd_title']) && isset($_POST['nd_description']) && $_GET['action']=='settings-update') {
+                    $updated = $nd_mysql->updateOptions($_POST['nd_title'], $_POST['nd_description']); ?>
+
+                    <?php if ($updated) { ?>
 
                         <div class="alert alert-success alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <p>Page deleted</p>
+                            <p>Settings updated</p>
+                        </div>
+
+                    <?php } else { ?>
+
+                        <div class="alert alert-success alert-danger">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <p>Error: Please Enter A Title</p>
                         </div>
 
                     <?php } ?>
 
-                    <div class="table-responsive">
+                <?php } ?> 
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <?php 
-                            $pages = $nd_mysql->getPagesInfo();
+                    <form id="settings-update-form" action="settings.php?action=settings-update" method="post">
+                        <div class="table-responsive">
 
-                            if($pages) {
-                                foreach ($pages as $page) { ?>
+                            <table class="table">
+                                <thead>
                                     <tr>
-                                        <td><?php echo $page['page_name']; ?></td>
-                                        <td><?php echo $page['user_login']; ?></td>
-                                        <td><?php echo $page['page_date']; ?></td>
-                                        <td>
-                                            <a href="<?php echo $page['page_url']; ?>" class="btn btn-primary btn-xs">View</a>
-                                            <a href="edit.php?p=<?php echo $page['page_id']; ?>" class='btn btn-primary btn-xs'>Edit</a> 
-                                            <a href="index.php?p=<?php echo $page['page_id']; ?>&action=delete" class='btn btn-primary btn-xs'>Delete</a></td>
-                                        </td>
+                                        <th>Nanodoc URL</th>
+                                        <th>Nanodoc Title</th>
+                                        <th>Nanodoc Description</th>
                                     </tr>
-                                <?php }
-                            } ?>
+                                </thead>
+                                <tbody>
+                                <?php 
+                                $settings = $nd_mysql->getOptions();
 
-                            </tbody>
-                        </table>
-                    </div>
-                    <div id="new-page-button"><a href='edit.php' class='btn btn-primary btn-xs'>Add new page</a></div>
+                                if($settings) { ?>
+                                    <tr>
+                                        <td><?php echo $settings['nd_url']; ?></td>
+                                        <td><input type="text" class="form-control" name="nd_title" placeholder="Nanodoc Title" value="<?php echo $settings['nd_title']; ?>" required></td>
+                                        <td><input type="text" class="form-control" name="nd_description" placeholder="Nanodoc Description" value="<?php echo $settings['nd_description']; ?>"></td>
+                                    </tr>
+                                <?php } ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="btn btn-primary btn-lg" type="submit">Update Your Settings</button>
+                    </form>
                 </div>
             </div>
-            <div id="users"></div>
         </section>
 
-                
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->

@@ -1,4 +1,4 @@
 nanodoc
 =======
 
-nanodoc is a tiny publishing system for creating beautiful and responsive documentation
+nanodoc is a tiny publishing system for creating beautiful and responsive documentations

@@ -1,11 +1,11 @@
 <?php
-session_start();
-
 require_once 'nd_functions.php'; 
-require_once 'nd_class_db.php';
-$nd_mysql = new nd_db;
 
-check_session_expire();
+check_login_session();
+
+require_once 'nd_class_db.php';
+
+$nd_mysql = new nd_db;
 
 $nd_mysql->checkDatabase(); ?>
 
@@ -19,7 +19,6 @@ $nd_mysql->checkDatabase(); ?>
 
         <!-- Bootstrap -->
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
         <!-- NannoDoc custom css -->
         <link rel="stylesheet" href="../css/custom-style.css">
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -94,7 +93,7 @@ $nd_mysql->checkDatabase(); ?>
                         <?php $page = $nd_mysql->getPage($_GET['p']); ?>
 
                         <h4>Page Title</h4>
-                        <input type="text" class="form-control" name="page_title" placeholder="Title" value="<?php echo $page['page_name'] ?>">
+                        <input type="text" class="form-control" name="page_title" placeholder="Title" value="<?php echo $page['page_name'] ?>" required>
                         <h4>Page Content</h4>
                         <textarea name="page_content" cols="30" rows="10" class="form-control"><?php echo $page['page_content']; ?></textarea>
                         <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
@@ -121,9 +120,9 @@ $nd_mysql->checkDatabase(); ?>
 
                     <form action="edit.php" method="post">
                         <h4>Page Title</h4>
-                        <input type="text" class="form-control" name="page_title" placeholder="Title" value="">
+                        <input type="text" class="form-control" name="page_title" placeholder="Title" value="<?php echo isset($_POST['page_title']) ? $_POST['page_title'] : "" ; ?>" required>
                         <h4>Page Content</h4>
-                        <textarea name="page_content" cols="30" rows="10" class="form-control"></textarea>
+                        <textarea name="page_content" cols="30" rows="10" class="form-control"><?php echo isset($_POST['page_content']) ? $_POST['page_content'] : "" ; ?></textarea>
                         <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
                     </form>
                 </div>

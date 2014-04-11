@@ -8,7 +8,6 @@
 
         <!-- Bootstrap -->
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
         <!-- NannoDoc custom css -->
         <link rel="stylesheet" href="../css/custom-style.css">
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

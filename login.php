@@ -1,7 +1,8 @@
 <?php
-
 require_once 'admin/nd_functions.php';
+
 require_once 'admin/nd_class_db.php';
+
 $nd_mysql = new nd_db;
 
 $nd_mysql->checkDatabase(); ?>
@@ -15,10 +16,9 @@ $nd_mysql->checkDatabase(); ?>
         <title><?php echo $nd_mysql->getOptions('nd_title') . ' &rsaquo; login'; ?></title>
 
         <!-- Bootstrap -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="admin/css/bootstrap.min.css" rel="stylesheet">
         <!-- NannoDoc custom css -->
-        <link rel="stylesheet" href="css/custom-style.css">
+        <link rel="stylesheet" href="admin/css/custom-style.css">
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -29,8 +29,8 @@ $nd_mysql->checkDatabase(); ?>
     <body>
 		<div class="login">
 			<form action="login.php" id="login-form" method="post">
-				<p>Username<input type="text" class="form-control" name="nd_user" placeholder="Username" value="<?php echo isset($_POST['nd_user']) ? $_POST['nd_user'] : '' ; ?>"></p>
-				<p>Password<input type="password" class="form-control" name="nd_pass" placeholder="Password"></p>
+				<p>Username<input type="text" class="form-control" name="nd_user" placeholder="Username" value="<?php echo isset($_POST['nd_user']) ? $_POST['nd_user'] : '' ; ?>" required autofocus></p>
+				<p>Password<input type="password" class="form-control" name="nd_pass" placeholder="Password" required></p>
 
 				<?php if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -45,6 +45,6 @@ $nd_mysql->checkDatabase(); ?>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="js/bootstrap.min.js"></script>
+        <script src="admin/js/bootstrap.min.js"></script>
     </body>
 </html>

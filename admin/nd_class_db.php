@@ -1,10 +1,14 @@
 <?php 
+require_once dirname(__FILE__) . '/lib/Parsedown.php';
 
 class nd_db {
 
-    private $htmlErrorPage = '<html><head><meta charset="UTF-8"><title>Document</title></head>
-                              <body><h1>Error whyle trying to send informations to database. Plasese Try again later.</h1></body></html>';
+
+    private $htmlErrorPage = '<html><head><meta charset="UTF-8"><title>Document</title></head><body><h1>Error whyle trying to send informations to database. Plasese Try again later.</h1></body></html>';
     
+    public function __construct() {
+        $this->parsedown = new Parsedown();
+    }
 
     private function sanitizeInput($input) {
         $input = trim($input);
@@ -41,7 +45,7 @@ class nd_db {
             $row = $result->fetch_assoc();
 
             if(!$row['user_login'] == $login || !(crypt($passwd, $row['user_pass']) == $row['user_pass'])) {
-                return 'Username or Pasword Not valid.';
+                return 'Username or Password Not valid.';
             }
 
             $result->close();
@@ -58,31 +62,10 @@ class nd_db {
         
     }
 
-    public function getOptions($param) {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
-
-        $sql = "SELECT `$param` FROM `options`;";
-
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-        $mysql->query("SET NAMES 'utf8'");
-
-        if(!$result = $mysql->query($sql)) {
-            die($this->htmlErrorPage);
-        }
-
-        $row = $result->fetch_assoc();
-
-        $result->close();
-        $mysql->close();
-
-        return $row[$param];
-    }
-
     public function getPagesInfo() {
         require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
-        $sql = "SELECT `page_id`, `user_login`, `page_name`, `page_url`, `page_date` FROM `pages`, `users` 
+        $sql = "SELECT `page_id`, `user_login`, `page_content`, `page_name`, `page_url`, `page_date` FROM `pages`, `users` 
                 WHERE `page_author` = `user_id`;";
 
         $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -97,6 +80,7 @@ class nd_db {
         }
 
         while ($row = $result->fetch_assoc()) {
+            $row['page_content'] = $this->parsedown->parse($row['page_content']);
             $pages[] = $row;
         }
 
@@ -252,6 +236,73 @@ class nd_db {
 
         return true;
     }
+
+    public function getOptions() {
+        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
+
+        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $mysql->query("SET NAMES 'utf8'");
+
+        $sql = "SELECT `nd_url`, `nd_title`, `nd_description` FROM `options`;";
+
+        if(!$result = $mysql->query($sql)) {
+            die($this->htmlErrorPage);
+        }
+
+        $options = $result->fetch_assoc();
+
+        $mysql->close();
+        $result->close();
+
+        return $options;
+    }
+
+    public function getOption($param) {
+        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
+
+        $sql = "SELECT `$param` FROM `options`;";
+
+        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+        $mysql->query("SET NAMES 'utf8'");
+
+        if(!$result = $mysql->query($sql)) {
+            die($this->htmlErrorPage);
+        }
+
+        $row = $result->fetch_assoc();
+
+        $result->close();
+        $mysql->close();
+
+        return $row[$param];
+    }
+
+    public function updateOptions($title, $description) {
+        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
+
+        if(empty($title)) {
+            return false;
+        }
+
+        $title = $this->sanitizeInput($title);
+        $description = $this->sanitizeInput($description);
+
+        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $mysql->query("SET NAMES 'utf8'");
+
+        $sql = "UPDATE `options` SET `nd_title` = '" . $mysql->real_escape_string($title) . "', `nd_description` = '" . $mysql->real_escape_string($description) . "';";
+
+        if(!$result = $mysql->query($sql)) {
+            die($this->htmlErrorPage);
+        }
+
+
+        return true;
+    }
+
+
+
 }
 
 
