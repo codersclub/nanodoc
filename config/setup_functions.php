@@ -65,7 +65,7 @@ function check_setup() {
             echo "<p>Please provide <br>$errMsg</p>";
             echo "<a class=\"btn btn-primary btn-lg\" href=\"setup.php?step=1\">Try again</a>";
         } else {
-            mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+            $con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
             if (mysqli_connect_errno()) {
                 echo "<p>Failed to connect to MySQL: " . mysqli_connect_error() . "</p>";
                 echo "<a class=\"btn btn-primary btn-lg\" href=\"setup.php?step=1\">Try again</a>";
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 CREATE TABLE IF NOT EXISTS `pages` (
     `page_id` int(10) NOT NULL AUTO_INCREMENT,
     `page_name` varchar(255) CHARACTER SET utf8 NOT NULL,
-    `page_author` int(10) NOT NULL,
+    `page_author` int(10),
     `page_content` longtext CHARACTER SET utf8 NOT NULL,
     `page_url` varchar(255) CHARACTER SET utf8 NOT NULL,
     `page_date` date NOT NULL,
