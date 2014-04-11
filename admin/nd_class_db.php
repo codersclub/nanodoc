@@ -1,14 +1,17 @@
 <?php 
-require_once dirname(__FILE__) . '/lib/Parsedown.php';
+define('ABSPATH', dirname(dirname(__FILE__)));
+
+require_once ABSPATH . '/config.php';
+
+require_once ABSPATH . '/admin/lib/Parsedown.php';
 
 class nd_db {
-
-
-    private $htmlErrorPage = '<html><head><meta charset="UTF-8"><title>Document</title></head><body><h1>Error whyle trying to send informations to database. Plasese Try again later.</h1></body></html>';
     
     public function __construct() {
         $this->parsedown = new Parsedown();
     }
+
+    private $htmlErrorPage = '<html><head><meta charset="UTF-8"><title>Document</title></head><body><h1>Error whyle trying to send informations to database. Plasese Try again later.</h1></body></html>';
 
     private function sanitizeInput($input) {
         $input = trim($input);
@@ -18,7 +21,6 @@ class nd_db {
     }
 
     public function checkDatabase() {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
@@ -28,7 +30,6 @@ class nd_db {
     }
 
     public function checkLogin($login, $passwd) {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         if(!empty($login) && !empty($passwd)) {
 
@@ -63,7 +64,6 @@ class nd_db {
     }
 
     public function getPagesInfo() {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         $sql = "SELECT `page_id`, `user_login`, `page_content`, `page_name`, `page_url`, `page_date` FROM `pages`, `users` 
                 WHERE `page_author` = `user_id`;";
@@ -91,7 +91,6 @@ class nd_db {
     }
 
     public function getPage($id) {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         $sql = "SELECT `page_name`, `page_content`, `page_url`, `page_date` FROM `pages` WHERE `page_id` = $id;";
 
@@ -112,7 +111,6 @@ class nd_db {
     }
 
     public function editPage($id, $pageName, $pageContent) {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
@@ -130,7 +128,6 @@ class nd_db {
     }
 
     public function deletePage($id) {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         $sql = "DELETE FROM `pages` WHERE `page_id` = $id";
 
@@ -146,7 +143,6 @@ class nd_db {
     }
 
     public function addPage($pageName, $pageContent, $author) {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
         $mysql->query("SET NAMES 'utf8'");
@@ -183,7 +179,6 @@ class nd_db {
     }
 
     public function getUsersInfo($userLogin=false) {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
         $mysql->query("SET NAMES 'utf8'");
@@ -214,7 +209,6 @@ class nd_db {
     }
 
     public function updateUser($userLogin, $email, $passwd, $userName) {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         if (empty($passwd)) {
             return false;
@@ -238,7 +232,6 @@ class nd_db {
     }
 
     public function getOptions() {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
         $mysql->query("SET NAMES 'utf8'");
@@ -258,7 +251,6 @@ class nd_db {
     }
 
     public function getOption($param) {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         $sql = "SELECT `$param` FROM `options`;";
 
@@ -279,7 +271,6 @@ class nd_db {
     }
 
     public function updateOptions($title, $description) {
-        require_once "{$_SERVER['DOCUMENT_ROOT']}/nanodoc/config.php";
 
         if(empty($title)) {
             return false;
