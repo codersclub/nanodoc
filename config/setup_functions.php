@@ -81,7 +81,15 @@ function check_setup() {
 function create_nd_tables(&$nd_title, &$nd_user, &$nd_pass, &$nd_user_email) {
     require_once '../config.php';
 
-    $uri = dirname(dirname($_SERVER['REQUEST_URI']));
+    //$uri = dirname(dirname($_SERVER['REQUEST_URI']));
+
+    $url = "http";
+    if ($_SERVER['HTTPS'] == "on") { $url .= 's'; }
+    $url .= '://';
+
+    $uri = str_replace('/config/install.php?step=2', '/', $_SERVER['REQUEST_URI']);
+
+    $url .= $_SERVER['SERVER_NAME'] . $uri;
 
     $sql = <<< EndOfSQL
 CREATE TABLE IF NOT EXISTS `users` (
@@ -117,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `options` (
 
 INSERT INTO `users` (`user_login`, `user_pass`, `user_email`) VALUES ('$nd_user', '$nd_pass', '$nd_user_email');
 
-INSERT INTO `options` (`nd_url`, `nd_title`) VALUES ('http://{$_SERVER['SERVER_NAME']}$uri', '$nd_title');
+INSERT INTO `options` (`nd_url`, `nd_title`) VALUES ('$url', '$nd_title');
 EndOfSQL;
 
     $con = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
