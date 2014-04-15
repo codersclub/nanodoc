@@ -81,14 +81,10 @@ function check_setup() {
 function create_nd_tables(&$nd_title, &$nd_user, &$nd_pass, &$nd_user_email) {
     require_once '../config.php';
 
-    //$uri = dirname(dirname($_SERVER['REQUEST_URI']));
-
     $url = "http";
     if ($_SERVER['HTTPS'] == "on") { $url .= 's'; }
     $url .= '://';
-
     $uri = str_replace('/config/install.php?step=2', '/', $_SERVER['REQUEST_URI']);
-
     $url .= $_SERVER['SERVER_NAME'] . $uri;
 
     $sql = <<< EndOfSQL
