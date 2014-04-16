@@ -1,7 +1,7 @@
 <?php 
-define('ABSPATH', dirname(dirname(__FILE__)));
-
-require_once ABSPATH . '/config.php';
+if (!defined('ABSPATH')) {
+    define('ABSPATH', dirname(dirname(__FILE__)));
+}
 
 require_once ABSPATH . '/admin/lib/Parsedown.php';
 
@@ -9,9 +9,8 @@ class nd_db {
     
     public function __construct() {
         $this->parsedown = new Parsedown();
+        $this->dbFilePath = $_SERVER['DOCUMENT_ROOT'] . '/nanodoc.sq3';
     }
-
-    private $htmlErrorPage = '<html><head><meta charset="UTF-8"><title>Document</title></head><body><h1>Error whyle trying to send informations to database. Plasese Try again later.</h1></body></html>';
 
     private function sanitizeInput($input) {
         $input = trim($input);
@@ -22,10 +21,11 @@ class nd_db {
 
     public function checkDatabase() {
 
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-        if($mysql->connect_error) {
-            die($this->htmlErrorPage);
+        try {
+            $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+            $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
     }
 
@@ -33,29 +33,31 @@ class nd_db {
 
         if(!empty($login) && !empty($passwd)) {
 
-            $sql = "SELECT `user_login`, `user_pass` FROM `users` WHERE `user_login` = '$login';";
+            try {
+                $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+                $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+                $stmt = $sqlite->prepare("SELECT user_login, user_pass FROM users WHERE user_login = :login");
+                $stmt->bindParam(':login', $login);
+                $stmt->execute();
 
-            $mysql->query("SET NAMES 'utf8'");
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if(!$result = $mysql->query($sql)) {
-                die($this->htmlErrorPage);
+                if(!$row['user_login'] == $login || !(crypt($passwd, $row['user_pass']) == $row['user_pass'])) {
+                    return 'Username or Password Not valid.';
+                }
+
+                $sqlite = NULL;
+
+                start_login_session();
+                $_SESSION['login'] = $row['user_login'];
+
+                return header("Location: admin/");
+
+            } catch (PDOException $e) {
+                die($e->getMessage());
             }
-
-            $row = $result->fetch_assoc();
-
-            if(!$row['user_login'] == $login || !(crypt($passwd, $row['user_pass']) == $row['user_pass'])) {
-                return 'Username or Password Not valid.';
-            }
-
-            $result->close();
-            $mysql->close();
-
-            start_login_session();
-            $_SESSION['login'] = $row['user_login'];
-
-            return header("Location: admin/");
+                
 
         }
         
@@ -63,233 +65,244 @@ class nd_db {
         
     }
 
-    public function getPagesInfo() {
+    public function getPagesInfo($getContent = true) {
 
-        $sql = "SELECT `page_id`, `user_login`, `page_content`, `page_name`, `page_url`, `page_date` FROM `pages`, `users` 
-                WHERE `page_author` = `user_id`;";
+        try {
 
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+            $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $mysql->query("SET NAMES 'utf8'");
+            $result = $sqlite->query("SELECT page_id, user_login, page_content, page_name, page_url, page_date FROM pages, users WHERE page_author = user_id");
 
-        if(!$result = $mysql->query($sql)) {
-            die($this->htmlErrorPage);
+            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                if($getContent) {
+                    $row['page_content'] = $this->parsedown->parse($row['page_content']);
+                }
+                $pages[] = $row;
+            }
+
+            $sqlite = NULL;
+
+            return isset($pages) ? $pages : false;
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-        if($result->num_rows == 0) {
-            return false;
-        }
-
-        while ($row = $result->fetch_assoc()) {
-            $row['page_content'] = $this->parsedown->parse($row['page_content']);
-            $pages[] = $row;
-        }
-
-        $result->close();
-        $mysql->close();
-
-        return $pages;
     }
 
     public function getPage($id) {
 
-        $sql = "SELECT `page_name`, `page_content`, `page_url`, `page_date` FROM `pages` WHERE `page_id` = $id;";
+        try {
 
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+            $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $mysql->query("SET NAMES 'utf8'");
+            $stmt = $sqlite->prepare("SELECT page_name, page_content, page_url, page_date FROM pages WHERE page_id = :id");
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
 
-        if(!$result = $mysql->query($sql)) {
-            die($this->htmlErrorPage);
+            $page = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $sqlite = NULL;
+
+            return $page;
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-
-        $page = $result->fetch_assoc();
-
-        $result->close();
-        $mysql->close();
-
-        return $page;
     }
 
     public function editPage($id, $pageName, $pageContent) {
 
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        try {
+            $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+            $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $mysql->query("SET NAMES 'utf8'");
+            $stmt = $sqlite->prepare("UPDATE pages SET page_name = :page_name, page_content = :page_content WHERE page_id = :id");
+            $stmt->bindParam(':page_name', $pageName);
+            $stmt->bindParam(':page_content', $pageContent);
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
 
-        $sql = "UPDATE `pages` SET `page_name` = '$pageName', `page_content` = '" . $mysql->real_escape_string($pageContent) . "' WHERE `page_id` = $id;";
+            $sqlite = NULL;
 
-        if(!$mysql->query($sql)) {
-            die($this->htmlErrorPage);
+            return true;
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-
-        $mysql->close();
-
-        return true;
     }
 
     public function deletePage($id) {
 
-        $sql = "DELETE FROM `pages` WHERE `page_id` = $id";
+        try {
+            $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+            $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            $stmt = $sqlite->prepare("DELETE FROM pages WHERE page_id = :id");
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
 
-        if(!$mysql->query($sql)) {
-            die($this->htmlErrorPage);
+            $sqlite = NULL;
+
+            return true;
+        } catch (PDOException $e) {
+            die($e->getMessage);
         }
-
-        $mysql->close();
-
-        return true;
     }
 
     public function addPage($pageName, $pageContent, $author) {
 
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        $mysql->query("SET NAMES 'utf8'");
+        try {
+            $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+            $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        /* Get the url */
-        if(!$result = $mysql->query("SELECT `nd_url` FROM `options`;")) {
-            die($this->htmlErrorPage);
+            /* Get the url */
+            $result = $sqlite->query("SELECT nd_url FROM options");
+            $pageUrl = $result->fetch(PDO::FETCH_ASSOC);
+
+            /* Get next auto_increment value */
+            $result = $sqlite->query("SELECT seq FROM SQLITE_SEQUENCE where name = 'pages'");
+            $pageId = $result->fetch(PDO::FETCH_ASSOC);
+            $pageId['seq']++;
+            $pageUrl['nd_url'] .= '?p=' . $pageId['seq'];
+
+            /* Get author's user_id */
+            $result = $sqlite->query("SELECT user_id FROM users WHERE user_login = '$author'");
+            $userId = $result->fetch(PDO::FETCH_ASSOC);
+
+
+            $stmt = $sqlite->prepare("INSERT INTO pages (page_name, page_author, page_content, page_url, page_date) VALUES (:page_name, :page_author, :page_content, :page_url, date('now'))");
+            $stmt->bindParam(':page_name', $pageName);
+            $stmt->bindParam(':page_author', $userId['user_id']);
+            $stmt->bindParam(':page_content', $pageContent);
+            $stmt->bindParam(':page_url', $pageUrl['nd_url']);
+            $stmt->execute();
+
+            return true;
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-        $pageUrl = $result->fetch_assoc();
-
-        /* Get next auto_increment value */
-        if(!$result = $mysql->query("SHOW TABLE STATUS LIKE 'pages'")) {
-            die($this->htmlErrorPage);
-        }
-        $pageId = $result->fetch_assoc();
-
-        /* Get author's user_id */
-        if(!$result = $mysql->query("SELECT `user_id` FROM `users` WHERE `user_login`='$author'")) {
-            die($this->htmlErrorPage);
-        }
-        $userId = $result->fetch_assoc();
-
-
-        $sql = "INSERT INTO `pages` (`page_name`, `page_author`, `page_content`, `page_url`, `page_date`) VALUES ('$pageName', '{$userId['user_id']}', '" . $mysql->real_escape_string($pageContent) . "', " . "'{$pageUrl['nd_url']}/?p={$pageId['Auto_increment']}'" . ", CURDATE());";
-
-        if(!$mysql->query($sql)) {
-            die($this->htmlErrorPage);
-        }
-
-        $mysql->close();
-        $result->close();
-
-        return true;
     }
 
-    public function getUsersInfo($userLogin=false) {
+    public function getUsersInfo($userLogin) {
 
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        $mysql->query("SET NAMES 'utf8'");
+        try {
+            $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+            $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $sql = "SELECT `user_login`, `user_name`, `user_email`, `user_role` FROM `users` WHERE `user_login` = '$userLogin';";
+            $stmt = $sqlite->prepare("SELECT user_login, user_name, user_email, user_role FROM users WHERE user_login = :user_login");
+            $stmt->bindParam(':user_login', $userLogin);
+            $stmt->execute();
 
-        if(!$result = $mysql->query($sql)) {
-            die($this->htmlErrorPage);
+            $usersInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            switch ($usersInfo['user_role']) {
+                case 1:
+                    $usersInfo['user_role'] = 'Contibutor';
+                    break;
+                
+                default:
+                    $usersInfo['user_role'] = 'Administrator';
+                    break;
+            }
+
+
+            $sqlite = NULL;
+
+            return $usersInfo;
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-
-        $usersInfo = $result->fetch_assoc();
-
-        switch ($usersInfo['user_role']) {
-            case 1:
-                $usersInfo['user_role'] = 'Contibutor';
-                break;
-            
-            default:
-                $usersInfo['user_role'] = 'Administrator';
-                break;
-        }
-
-
-        $mysql->close();
-        $result->close();
-
-        return $usersInfo;
     }
 
     public function updateUser($userLogin, $email, $passwd, $userName) {
 
-        if (empty($passwd)) {
-            return false;
+        try {
+
+            $email = $this->sanitizeInput($email);
+            $passwd = crypt($this->sanitizeInput($passwd));
+            $userName = $this->sanitizeInput($userName);
+
+            $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+            $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            if (empty($passwd)) {
+                $stmt = $sqlite->prepare("UPDATE users SET user_name = :userName, user_email = :email WHERE user_login = :userLogin;");
+            } else {
+                $stmt = $sqlite->prepare("UPDATE users SET user_name = :userName, user_pass = :passwd, user_email = :email WHERE user_login = :userLogin;");
+                $stmt->bindParam(':passwd', $passwd);
+            }
+            
+            $stmt->bindParam(':userName', $userName);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':userLogin', $userLogin);
+            $stmt->execute();
+
+            return true;
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-
-        $email = $this->sanitizeInput($email);
-        $passwd = crypt($this->sanitizeInput($passwd));
-        $userName = $this->sanitizeInput($userName);
-
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        $mysql->query("SET NAMES 'utf8'");
-
-        $sql = "UPDATE `users` SET `user_name` = '" . $mysql->real_escape_string($userName) . "', `user_pass` = '" . $mysql->real_escape_string($passwd) . "', `user_email` = '" . $mysql->real_escape_string($email) . "' WHERE `user_login` = '$userLogin';";
-
-        if(!$result = $mysql->query($sql)) {
-            die($this->htmlErrorPage);
-        }
-
-
-        return true;
     }
 
     public function getOptions() {
 
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        $mysql->query("SET NAMES 'utf8'");
+        try {
+            $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+            $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $sql = "SELECT `nd_url`, `nd_title`, `nd_description` FROM `options`;";
+            $result = $sqlite->query("SELECT nd_url, nd_title, nd_description FROM options");
 
-        if(!$result = $mysql->query($sql)) {
-            die($this->htmlErrorPage);
+            $options = $result->fetch(PDO::FETCH_ASSOC);
+
+            $sqlite = NULL;
+
+            return $options;
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-
-        $options = $result->fetch_assoc();
-
-        $mysql->close();
-        $result->close();
-
-        return $options;
     }
 
     public function getOption($param) {
 
-        $sql = "SELECT `$param` FROM `options`;";
+        try {
 
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+            $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $mysql->query("SET NAMES 'utf8'");
+            $result = $sqlite->query("SELECT $param FROM options");
 
-        if(!$result = $mysql->query($sql)) {
-            die($this->htmlErrorPage);
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+
+            $sqlite = NULL;
+
+            return $row[$param];
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-
-        $row = $result->fetch_assoc();
-
-        $result->close();
-        $mysql->close();
-
-        return $row[$param];
     }
 
     public function updateOptions($title, $description) {
 
-        if(empty($title)) {
-            return false;
+        try {
+            if(empty($title)) {
+                return false;
+            }
+
+            $title = $this->sanitizeInput($title);
+            $description = $this->sanitizeInput($description);
+
+            $sqlite = new PDO('sqlite:' . $this->dbFilePath);
+            $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $stmt = $sqlite->prepare("UPDATE options SET nd_title = :nd_title, nd_description = :nd_description");
+            $stmt->bindParam(':nd_title', $title);
+            $stmt->bindParam(':nd_description', $description); 
+
+            $stmt->execute();
+
+            $sqlite = NULL;
+
+            return true;
+        } catch (PDOException $e) {
+            die($e->getMessage());
         }
-
-        $title = $this->sanitizeInput($title);
-        $description = $this->sanitizeInput($description);
-
-        $mysql = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        $mysql->query("SET NAMES 'utf8'");
-
-        $sql = "UPDATE `options` SET `nd_title` = '" . $mysql->real_escape_string($title) . "', `nd_description` = '" . $mysql->real_escape_string($description) . "';";
-
-        if(!$result = $mysql->query($sql)) {
-            die($this->htmlErrorPage);
-        }
-
-
-        return true;
     }
 
 
