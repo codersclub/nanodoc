@@ -17,127 +17,63 @@ function check_form($postField, &$error, &$errMsg, $fieldName) {
     return get_input($_POST[$postField]);
 }
 
-function create_setup() {
-    
-    if (is_writable(dirname(dirname(__FILE__)) . '/')) {
-        $config_file = fopen('../config.php', 'w');
-        fwrite($config_file, "<?php \n");
-    
-        foreach ($_POST as $key => $value) {
-            fwrite($config_file, "define('" . strtoupper($key) . "', '$value');\r\n\n");
-        }
+function sqlite3_create_table(&$nd_title, &$nd_user, &$nd_pass, &$nd_user_email) {
+    try {
 
-        echo "<p>Configuration file created succesfully. Please proceed to installation.</p>";
-        echo "<a class=\"btn btn-primary btn-lg\" href=\"install.php?step=1\">Start Installation</a>";
-        fclose($config_file);
-    } else {
-        echo "<p>Configuration file not created. Please create manually a config.php at the root directory of NanoDoc and copy/paste the informations from below.
-             Then proceed to installation</p>";
+        $url = "http";
+        if ($_SERVER['HTTPS'] == "on") { $url .= 's'; }
+        $url .= '://';
+        $uri = str_replace('/config/install.php?step=2', '/', $_SERVER['REQUEST_URI']);
+        $url .= $_SERVER['SERVER_NAME'] . $uri;
+        $path = $_SERVER['DOCUMENT_ROOT'];
 
-        echo "<textarea class=\"form-control\">
-<?php
 
-define('DB_NAME', '{$_POST['db_name']}'');
+        $sqlite = new PDO('sqlite:../nanodoc.sq3');
 
-define('DB_USER', '{$_POST['db_user']}'');
-
-define('DB_PASS', '{$_POST['db_pass']}'');
-
-define('DB_HOST', '{$_POST['db_host']}'');
-</textarea>";
-
-        echo "<a class=\"btn btn-primary btn-lg\" href=\"install.php?step=1\">Start Installation</a>";
-    }
-}
-
-function check_setup() {
-    $errMsg = '';
-    $error = false;
-
-    if($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-        $db_name = check_form('db_name', $error, $errMsg, $fieldName = 'Database name');
-        $db_user = check_form('db_user', $error, $errMsg, $fieldName = 'Database username');
-        $db_pass = check_form('db_pass', $error, $errMsg, $fieldName = 'Database password');
-        $db_host = check_form('db_host', $error, $errMsg, $fieldName = 'Database hostname');
-
-        if ($error) {
-            echo "<p>Please provide <br>$errMsg</p>";
-            echo "<a class=\"btn btn-primary btn-lg\" href=\"setup.php?step=1\">Try again</a>";
-        } else {
-            $con = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
-            if (mysqli_connect_errno()) {
-                echo "<p>Failed to connect to MySQL: " . mysqli_connect_error() . "</p>";
-                echo "<a class=\"btn btn-primary btn-lg\" href=\"setup.php?step=1\">Try again</a>";
-            } else {
-                create_setup();
-            }
-        }
-
-        mysqli_close($con);
-    }
-}
-
-function create_nd_tables(&$nd_title, &$nd_user, &$nd_pass, &$nd_user_email) {
-    require_once '../config.php';
-
-    $url = "http";
-    if ($_SERVER['HTTPS'] == "on") { $url .= 's'; }
-    $url .= '://';
-    $uri = str_replace('/config/install.php?step=2', '/', $_SERVER['REQUEST_URI']);
-    $url .= $_SERVER['SERVER_NAME'] . $uri;
-
-    $sql = <<< EndOfSQL
-CREATE TABLE IF NOT EXISTS `users` (
-    `user_id` int(10) NOT NULL AUTO_INCREMENT,
-    `user_name` varchar(40) CHARACTER SET utf8 NOT NULL DEFAULT '',
-    `user_login` varchar(30) CHARACTER SET utf8 NOT NULL,
-    `user_pass` varchar(300) CHARACTER SET utf8 NOT NULL,
-    `user_email` varchar(50) CHARACTER SET utf8 NOT NULL,
-    `user_role` tinyint(1) NOT NULL DEFAULT 0,
-    PRIMARY KEY (`user_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-CREATE TABLE IF NOT EXISTS `pages` (
-    `page_id` int(10) NOT NULL AUTO_INCREMENT,
-    `page_name` varchar(255) CHARACTER SET utf8 NOT NULL,
-    `page_author` int(10),
-    `page_content` longtext CHARACTER SET utf8 NOT NULL,
-    `page_url` varchar(255) CHARACTER SET utf8 NOT NULL,
-    `page_date` date NOT NULL,
-    PRIMARY KEY (`page_id`),
-    FOREIGN KEY fk_user(`page_author`) REFERENCES users(`user_id`)
+        $sql = <<< EndOfSQL
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_name TEXT NOT NULL DEFAULT '',
+    user_login TEXT NOT NULL,
+    user_pass TEXT NOT NULL,
+    user_email TEXT NOT NULL,
+    user_role INTEGER NOT NULL DEFAULT 0
+    );
+CREATE TABLE IF NOT EXISTS pages (
+    page_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    page_name TEXT NOT NULL,
+    page_author INTEGER,
+    page_content longtext NOT NULL,
+    page_url TEXT NOT NULL,
+    page_date date NOT NULL,
+    FOREIGN KEY(page_author) REFERENCES users(user_id)
     ON DELETE SET NULL 
     ON UPDATE CASCADE
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+    );
+CREATE TABLE IF NOT EXISTS options (
+    option_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nd_url TEXT NOT NULL,
+    nd_title TEXT NOT NULL,
+    nd_description TEXT NOT NULL DEFAULT ''
+    );
+INSERT INTO users (user_login, user_pass, user_email) VALUES ('$nd_user', '$nd_pass', '$nd_user_email');
 
-CREATE TABLE IF NOT EXISTS `options` (
-    `option_id` int(10) NOT NULL AUTO_INCREMENT,
-    `nd_url` varchar(255) CHARACTER SET utf8 NOT NULL,
-    `nd_title` varchar(100) CHARACTER SET utf8 NOT NULL,
-    `nd_description` varchar(200) CHARACTER SET utf8 NOT NULL DEFAULT '',
-    PRIMARY KEY (`option_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+INSERT INTO options (nd_url, nd_title) VALUES ('$url', '$nd_title');
 
-INSERT INTO `users` (`user_login`, `user_pass`, `user_email`) VALUES ('$nd_user', '$nd_pass', '$nd_user_email');
-
-INSERT INTO `options` (`nd_url`, `nd_title`) VALUES ('$url', '$nd_title');
+INSERT INTO pages (page_name, page_author, page_content, page_url, page_date) VALUES ('New Page', '$nd_user', 'This Is Your First Page Edit or Delete It.', '$url?p=1', date('now'));
 EndOfSQL;
 
-    $con = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        $sqlite->exec($sql);
 
-    if (mysqli_connect_errno()) {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        echo "<a class=\"btn btn-primary btn-lg\" href=\"install.php?step=1\">Try again</a>";
-    } 
-    elseif (mysqli_multi_query($con, $sql)) {
         echo "<p>Nanodoc installed succesfully. You can login now and create your first page</p>";
         echo "<a class=\"btn btn-primary btn-lg\" href=\"../login.php\">Login</a>"; 
-    } else {
-        echo 'error';
-    }
 
-    mysqli_close($con);
+        $sqlite= NULL;
+    } catch (PDOException $e) {
+        echo "Failed to connect to MySQL: " . $e->getMessage();
+        echo "<a class=\"btn btn-primary btn-lg\" href=\"install.php?step=1\">Try again</a>";
+    }
+    
 }
 
 function install_nanodoc() {
@@ -156,7 +92,7 @@ function install_nanodoc() {
             echo "<p>Please provide <br>$errMsg</p>";
             echo "<a class=\"btn btn-primary btn-lg\" href=\"install.php?step=1\">Try again</a>";
         } else {
-            create_nd_tables($nd_title, $nd_user, $nd_pass, $nd_user_email);
+            sqlite3_create_table($nd_title, $nd_user, $nd_pass, $nd_user_email);
         }
     }
 }
