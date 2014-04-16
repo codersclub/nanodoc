@@ -60,7 +60,7 @@ INSERT INTO users (user_login, user_pass, user_email) VALUES ('$nd_user', '$nd_p
 
 INSERT INTO options (nd_url, nd_title) VALUES ('$url', '$nd_title');
 
-INSERT INTO pages (page_name, page_author, page_content, page_url, page_date) VALUES ('New Page', '$nd_user', 'This Is Your First Page Edit or Delete It.', '$url?p=1', date('now'));
+INSERT INTO pages (page_name, page_author, page_content, page_url, page_date) VALUES ('New Page', 1, 'This Is Your First Page Edit or Delete It.', '$url?p=1', date('now'));
 EndOfSQL;
 
         $sqlite->exec($sql);
@@ -70,7 +70,7 @@ EndOfSQL;
 
         $sqlite= NULL;
     } catch (PDOException $e) {
-        echo "Failed to connect to MySQL: " . $e->getMessage();
+        echo $e->getMessage();
         echo "<a class=\"btn btn-primary btn-lg\" href=\"install.php?step=1\">Try again</a>";
     }
     
