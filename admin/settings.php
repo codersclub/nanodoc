@@ -15,7 +15,7 @@ $nd_mysql->checkDatabase(); ?>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?php echo $nd_mysql->getOptions('nd_title') . ' &rsaquo; Administration'; ?></title>
+        <title><?php echo $nd_mysql->getOption('nd_title') . ' &rsaquo; Administration'; ?></title>
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -57,7 +57,7 @@ $nd_mysql->checkDatabase(); ?>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-left">
                                     <li><a href="user.php">Account</a></li>
-                                    <li><a href="settins.php">Settings</a></li>
+                                    <li><a href="settings.php">Settings</a></li>
                                     <li><a href="index.php?action=logout">Logout</a></li>
                                 </ul>
                             </li>

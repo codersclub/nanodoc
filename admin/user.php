@@ -116,8 +116,8 @@ $nd_mysql->checkDatabase(); ?>
                                         <td><?php echo $user['user_login']; ?></td>
                                         <td><?php echo $user['user_role']; ?></td>
                                         <td><input type="email" class="form-control" name="user-email" placeholder="New Email" value="<?php echo $user['user_email']; ?>" required></td>
-                                        <td><input type="text" class="form-control" name="user-name" placeholder="Your Real Name" value="<?php echo $user['user_name']; ?>" required></td>
-                                        <td><input type="password" class="form-control" name="user-pass" placeholder="New Password" required></td>
+                                        <td><input type="text" class="form-control" name="user-name" placeholder="Your Real Name" value="<?php echo $user['user_name']; ?>"></td>
+                                        <td><input type="password" class="form-control" name="user-pass" placeholder="New Password"></td>
                                     </tr>
                                 <?php } ?>
 

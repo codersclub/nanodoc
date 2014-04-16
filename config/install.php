@@ -22,12 +22,12 @@
     <body>
     <div class="jumbotron config">
         <h1>Welcome to NanoDoc</h1>
-
-<?php if (file_exists('../config.php')) { ?>
+        
+<?php if (file_exists('../nanodoc.sq3')) { ?>
     
     <?php if(empty($_GET['step'])) { ?>
-        <p>Configuration file already existes. Proceed to installation</p>
-        <a class="btn btn-primary btn-lg" href="install.php?step=1">Installation</a>
+        <p>Nanodoc is already installed. You can login now</p>
+        <a class="btn btn-primary btn-lg" href="../login.php">Login</a>
     <?php } else { ?>
 
     <?php 

@@ -102,7 +102,7 @@ $nd_mysql->checkDatabase(); ?>
                             </thead>
                             <tbody>
                             <?php 
-                            $pages = $nd_mysql->getPagesInfo();
+                            $pages = $nd_mysql->getPagesInfo($getContent=false);
 
                             if($pages) {
                                 foreach ($pages as $page) { ?>
