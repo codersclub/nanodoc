@@ -124,7 +124,7 @@ class nd_db {
 
             $sqlite = NULL;
 
-            return true;
+            return header("Location: " . $_SERVER['REQUEST_URI']);
         } catch (PDOException $e) {
             die($e->getMessage());
         }

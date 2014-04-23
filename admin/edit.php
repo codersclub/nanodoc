@@ -77,10 +77,10 @@ $nd_mysql->checkDatabase(); ?>
                 <div class="panel-body">
 
                     <?php if (isset($_GET['action']) && isset($_POST['page_title']) && isset($_POST['page_content']) && $_GET['action']=='edit') {
-                        $edited = $nd_mysql->editPage($_GET['p'], $_POST['page_title'], $_POST['page_content']);
+                        $nd_mysql->editPage($_GET['p'], $_POST['page_title'], $_POST['page_content']);
                     } ?>
 
-                    <?php if (!empty($edited)) { ?>
+                    <?php if (!empty($_GET['action'])) { ?>
 
                         <div class="alert alert-success alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -97,7 +97,7 @@ $nd_mysql->checkDatabase(); ?>
                         <input type="text" class="form-control" name="page_title" placeholder="Title" value="<?php echo $page['page_name'] ?>" required>
                         <h4>Page Content</h4>
                         <textarea name="page_content" cols="30" rows="10" class="form-control"><?php echo $page['page_content']; ?></textarea>
-                        <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                        <button type="submit" name="submit" class="btn btn-primary btn-lg">Save Changes</button>
                     </form>
                 </div>
 
