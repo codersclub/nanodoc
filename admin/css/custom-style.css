@@ -29,6 +29,10 @@
     float: right;
 }
 
+#install-form th {
+    white-space: nowrap;
+}
+
 textarea.form-control {
     height: 250px;
     margin-bottom: 30px;
