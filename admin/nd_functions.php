@@ -21,3 +21,8 @@ function end_login_session() {
 	session_destroy();
 	header('Location: ../login.php');
 }
+
+function text_for_id($text) {
+	$idText = preg_replace('/[^A-Za-z0-9]/', '-', $text);
+	return $idText;
+}

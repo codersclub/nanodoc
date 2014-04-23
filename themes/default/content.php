@@ -1,46 +1,48 @@
         
-	<section id="content" class="container">
+    <section id="content" class="container">
 
-		<div class="row">
-		    
-		    <div class="col-md-9">    
-		        <?php $pages = $nd_mysql->getPagesInfo();
+        <div class="row">
+            
+            <div class="col-md-9">    
+                <?php $pages = $nd_mysql->getPagesInfo();
+                      
+                if ($pages) {
+                    foreach ($pages as $page) { ?>
 
-		        if ($pages) {
-		            foreach ($pages as $page) { ?>
-		             <article id="<?php echo str_replace(' ', '-', $page['page_name']); ?>" class="page">
-		             	<header>
-		             		<h1><a href="<?php echo $page['page_url']; ?>"><?php echo $page['page_name']; ?></a></h1>
-		             		<p>
-		             			<span class="glyphicon glyphicon-time"></span><?php echo $page['page_date']; ?>
-		             			<span class="glyphicon glyphicon-user"></span><?php echo $page['user_login'] ?>
-		             		</p>
-						</header>
-						<div class="page-content">
-							<?php echo $page['page_content']; ?>
-						</div>
-		             </article>
-		            <?php }
-		        } ?>
+                    <article id="<?php echo text_for_id($page['page_name']); ?>" class="page">
+                        <header>
+                            <h1><a href="<?php echo $page['page_url']; ?>"><?php echo $page['page_name']; ?></a></h1>
+                            <p>
+                                <span class="glyphicon glyphicon-time"></span><?php echo $page['page_date']; ?>
+                                <span class="glyphicon glyphicon-user"></span><?php echo $page['user_login'] ?>
+                            </p>
+                        </header>
+                        <div class="page-content">
+                            <?php echo $page['page_content']; ?>
+                        </div>
+                    </article>
+                    
+                    <?php }
+                } ?>
 
-			</div>
+            </div>
 
-			<div class="col-md-3">
-				<div id="toc" class="bs-docs-sidebar">
-					<ul class="nav">
-						
-						<?php if ($pages) {
-							foreach ($pages as $page) { ?>
+            <div class="col-md-3">
+                <div id="toc" class="bs-docs-sidebar">
+                    <ul class="nav">
+                        
+                        <?php if ($pages) {
+                            foreach ($pages as $page) { ?>
 
-								<li><a href="#<?php echo str_replace(' ', '-', $page['page_name']) ?>"><?php echo $page['page_name']; ?></a></li>
+                                <li><a href="#<?php echo text_for_id($page['page_name']); ?>"><?php echo $page['page_name']; ?></a></li>
 
-							<?php }
-						} ?>
-						
-					</ul>
-					<a class="back-to-top" href="#top">Back to top</a>
-				</div>
-			</div>
+                            <?php }
+                        } ?>
+                        
+                    </ul>
+                    <a class="back-to-top" href="#top">Back to top</a>
+                </div>
+            </div>
 
-		</div>
+        </div>
     </section>
