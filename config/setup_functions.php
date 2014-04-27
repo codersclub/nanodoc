@@ -25,8 +25,6 @@ function sqlite3_create_table(&$nd_title, &$nd_user, &$nd_pass, &$nd_user_email)
         $url .= '://';
         $uri = str_replace('/config/install.php?step=2', '/', $_SERVER['REQUEST_URI']);
         $url .= $_SERVER['SERVER_NAME'] . $uri;
-        $path = $_SERVER['DOCUMENT_ROOT'];
-
 
         $sqlite = new PDO('sqlite:../nanodoc.sq3');
 
