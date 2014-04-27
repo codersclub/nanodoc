@@ -218,15 +218,16 @@ class nd_db {
         try {
 
             $email = $this->sanitizeInput($email);
-            $passwd = crypt($this->sanitizeInput($passwd));
             $userName = $this->sanitizeInput($userName);
 
             $sqlite = new PDO('sqlite:' . $this->dbFilePath);
             $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
             if (empty($passwd)) {
                 $stmt = $sqlite->prepare("UPDATE users SET user_name = :userName, user_email = :email WHERE user_login = :userLogin;");
             } else {
                 $stmt = $sqlite->prepare("UPDATE users SET user_name = :userName, user_pass = :passwd, user_email = :email WHERE user_login = :userLogin;");
+                $passwd = crypt($this->sanitizeInput($passwd));
                 $stmt->bindParam(':passwd', $passwd);
             }
             
