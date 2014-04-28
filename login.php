@@ -3,9 +3,14 @@ require_once 'admin/nd_functions.php';
 
 require_once 'admin/nd_class_db.php';
 
-$nd_mysql = new nd_db;
+if (file_exists('nanodoc.sq3')) {
+    $nd_mysql = new nd_db;
+    $nd_mysql->checkDatabase();
+} else {
+    header('Location: config/install.php');
+}
 
-$nd_mysql->checkDatabase(); ?>
+?>
 
 <!DOCTYPE html>
 <html>
