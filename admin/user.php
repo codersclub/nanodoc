@@ -5,8 +5,8 @@ check_login_session();
 require_once 'nd_class_db.php';
 
 if (file_exists(ABSPATH . '/nanodoc.sq3')) {
-    $nd_mysql = new nd_db;
-    $nd_mysql->checkDatabase();
+    $nd_sqlite = new nd_db;
+    $nd_sqlite->checkDatabase();
 } else {
     header('Location: ../config/install.php');
 } ?>
@@ -17,7 +17,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?php echo $nd_mysql->getOption('nd_title') . ' &rsaquo; Administration'; ?></title>
+        <title><?php echo $nd_sqlite->getOption('nd_title') . ' &rsaquo; Administration'; ?></title>
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -43,7 +43,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                     <ul class="nav">
                         <li class="admin-title navbar-left">
                             <span class="glyphicon glyphicon-home"></span>
-                            <p><a href="<?php echo $nd_mysql->getOption('nd_url'); ?>"><?php echo $nd_mysql->getOption('nd_title'); ?></a></p>
+                            <p><a href="<?php echo $nd_sqlite->getOption('nd_url'); ?>"><?php echo $nd_sqlite->getOption('nd_title'); ?></a></p>
                         </li>
                         <li class="admin-page-name">
                             <span class="glyphicon glyphicon-cog"></span>
@@ -76,7 +76,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                 <div class="panel-body">
 
                 <?php if (isset($_GET['action']) && isset($_POST['user-email']) && isset($_POST['user-name']) && isset($_POST['user-pass']) && $_GET['action']=='user-update') {
-                    $updated = $nd_mysql->updateUser($_SESSION['login'], $_POST['user-email'], $_POST['user-pass'], $_POST['user-name']); ?>
+                    $updated = $nd_sqlite->updateUser($_SESSION['login'], $_POST['user-email'], $_POST['user-pass'], $_POST['user-name']); ?>
 
                     <?php if ($updated) { ?>
 
@@ -111,7 +111,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                                 </thead>
                                 <tbody>
                                 <?php 
-                                $user = $nd_mysql->getUsersInfo($_SESSION['login']);
+                                $user = $nd_sqlite->getUsersInfo($_SESSION['login']);
 
                                 if($user) { ?>
                                     <tr>

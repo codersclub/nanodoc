@@ -5,8 +5,8 @@ check_login_session();
 require_once 'nd_class_db.php';
 
 if (file_exists(ABSPATH . '/nanodoc.sq3')) {
-    $nd_mysql = new nd_db;
-    $nd_mysql->checkDatabase();
+    $nd_sqlite = new nd_db;
+    $nd_sqlite->checkDatabase();
 } else {
     header('Location: ../config/install.php');
 } ?>
@@ -17,7 +17,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?php echo 'Edit Page &rsaquo; ' . $nd_mysql->getOption('nd_title'); ?></title>
+        <title><?php echo 'Edit Page &rsaquo; ' . $nd_sqlite->getOption('nd_title'); ?></title>
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -44,7 +44,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                     <ul class="nav">
                         <li class="admin-title navbar-left">
                             <span class="glyphicon glyphicon-home"></span>
-                            <p><a href="<?php echo $nd_mysql->getOption('nd_url'); ?>"><?php echo $nd_mysql->getOption('nd_title'); ?></a></p>
+                            <p><a href="<?php echo $nd_sqlite->getOption('nd_url'); ?>"><?php echo $nd_sqlite->getOption('nd_title'); ?></a></p>
                         </li>
                         <li class="admin-page-name">
                             <span class="glyphicon glyphicon-cog"></span>
@@ -79,7 +79,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                 <div class="panel-body">
 
                     <?php if (isset($_GET['action']) && isset($_POST['page_title']) && isset($_POST['page_content']) && $_GET['action']=='edit') {
-                        $nd_mysql->editPage($_GET['p'], $_POST['page_title'], $_POST['page_content']);
+                        $nd_sqlite->editPage($_GET['p'], $_POST['page_title'], $_POST['page_content']);
                     } ?>
 
                     <?php if (!empty($_GET['action'])) { ?>
@@ -93,7 +93,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
 
                     <form action="edit.php?p=<?php echo $_GET['p']; ?>&action=edit" method="post">
 
-                        <?php $page = $nd_mysql->getPage($_GET['p']); ?>
+                        <?php $page = $nd_sqlite->getPage($_GET['p']); ?>
 
                         <h4>Page Title</h4>
                         <input type="text" class="form-control" name="page_title" placeholder="Title" value="<?php echo $page['page_name'] ?>" required>
@@ -109,7 +109,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                 <div class="panel-body">
 
                 <?php if (isset($_POST['page_title']) && isset($_POST['page_content'])) { 
-                    $created = $nd_mysql->addPage($_POST['page_title'], $_POST['page_content'], $_SESSION['login']);
+                    $created = $nd_sqlite->addPage($_POST['page_title'], $_POST['page_content'], $_SESSION['login']);
                 } ?>
 
                 <?php if (!empty($created)) { ?>
