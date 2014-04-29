@@ -3,7 +3,7 @@ require_once 'admin/nd_functions.php';
 
 require_once 'admin/nd_class_db.php';
 
-if (file_exists('nanodoc.sq3')) {
+if (file_exists(ABSPATH . '/nanodoc.sq3')) {
     $nd_mysql = new nd_db;
     $nd_mysql->checkDatabase();
 } else {

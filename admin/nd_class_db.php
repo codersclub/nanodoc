@@ -9,7 +9,7 @@ class nd_db {
     
     public function __construct() {
         $this->parsedown = new Parsedown();
-        $this->dbFilePath = $_SERVER['DOCUMENT_ROOT'] . '/nanodoc.sq3';
+        $this->dbFilePath = ABSPATH . '/nanodoc.sq3';
     }
 
     private function sanitizeInput($input) {
