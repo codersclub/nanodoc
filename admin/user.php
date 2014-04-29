@@ -2,6 +2,8 @@
 require_once 'nd_functions.php';
 check_login_session();
 
+require_once 'nd_class_db.php';
+
 if (file_exists(ABSPATH . '/nanodoc.sq3')) {
     $nd_mysql = new nd_db;
     $nd_mysql->checkDatabase();
