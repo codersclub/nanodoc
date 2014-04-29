@@ -4,7 +4,7 @@
         <div class="row">
             
             <div class="col-md-9">    
-                <?php $pages = $nd_mysql->getPagesInfo();
+                <?php $pages = $nd_sqlite->getPagesInfo();
                       
                 if ($pages) {
                     foreach ($pages as $page) { ?>

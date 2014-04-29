@@ -6,7 +6,7 @@ start_login_session();
 
 require_once ABSPATH . '/admin/nd_class_db.php';
 
-$nd_mysql = new nd_db;
+$nd_sqlite = new nd_db;
 
 ?>
 
@@ -16,14 +16,14 @@ $nd_mysql = new nd_db;
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?php echo $nd_mysql->getOption('nd_title'); ?></title>
+        <title><?php echo $nd_sqlite->getOption('nd_title'); ?></title>
 
         <!-- Bootstrap -->
-        <link href="<?php echo $nd_mysql->getOption('nd_url') . 'admin/css/bootstrap.min.css'; ?>" rel="stylesheet">
+        <link href="<?php echo $nd_sqlite->getOption('nd_url') . 'admin/css/bootstrap.min.css'; ?>" rel="stylesheet">
         <!-- NannoDoc custom css -->
-        <link rel="stylesheet" href="<?php echo $nd_mysql->getOption('nd_url') . 'admin/css/bs-docs.css'; ?>">
+        <link rel="stylesheet" href="<?php echo $nd_sqlite->getOption('nd_url') . 'admin/css/bs-docs.css'; ?>">
         <!-- Deafult theme css -->
-        <link rel="stylesheet" href="<?php echo $nd_mysql->getOption('nd_url') . 'themes/default/css/style.css'; ?>">
+        <link rel="stylesheet" href="<?php echo $nd_sqlite->getOption('nd_url') . 'themes/default/css/style.css'; ?>">
         <style>
 
 
@@ -44,7 +44,7 @@ $nd_mysql = new nd_db;
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="index.php" class="navbar-brand"><?php echo $nd_mysql->getOption('nd_title'); ?></a>
+                <a href="<?php echo $nd_sqlite->getOption('nd_url'); ?>" class="navbar-brand"><?php echo $nd_sqlite->getOption('nd_title'); ?></a>
             </div>
 
             <div id="default-header" class="collapse navbar-collapse" role="navigation">
@@ -57,6 +57,6 @@ $nd_mysql = new nd_db;
     </header>
     <section id="logo">
         <div class="container">
-            <img src="<?php echo $nd_mysql->getOption('nd_url') . 'themes/default/images/opentech.png'; ?>" alt="logo">
+            <img src="<?php echo $nd_sqlite->getOption('nd_url') . 'themes/default/images/opentech.png'; ?>" alt="logo">
         </div>
     </section>
