@@ -4,9 +4,12 @@ check_login_session();
 
 require_once 'nd_class_db.php';
 
-$nd_mysql = new nd_db;
-
-$nd_mysql->checkDatabase(); ?>
+if (file_exists(ABSPATH . '/nanodoc.sq3')) {
+    $nd_sqlite = new nd_db;
+    $nd_sqlite->checkDatabase();
+} else {
+    header('Location: ../config/install.php');
+} ?>
 
 <!DOCTYPE html>
 <html>
@@ -14,7 +17,7 @@ $nd_mysql->checkDatabase(); ?>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?php echo $nd_mysql->getOption('nd_title') . ' &rsaquo; Administration'; ?></title>
+        <title><?php echo $nd_sqlite->getOption('nd_title') . ' &rsaquo; Administration'; ?></title>
 
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -41,7 +44,7 @@ $nd_mysql->checkDatabase(); ?>
                     <ul class="nav">
                         <li class="admin-title navbar-left">
                             <span class="glyphicon glyphicon-home"></span>
-                            <p><a href="<?php echo $nd_mysql->getOption('nd_url'); ?>"><?php echo $nd_mysql->getOption('nd_title'); ?></a></p>
+                            <p><a href="<?php echo $nd_sqlite->getOption('nd_url'); ?>"><?php echo $nd_sqlite->getOption('nd_title'); ?></a></p>
                         </li>
                         <li class="admin-page-name">
                             <span class="glyphicon glyphicon-cog"></span>
@@ -72,7 +75,7 @@ $nd_mysql->checkDatabase(); ?>
         } ?>
     
         <?php if (isset($_GET['action']) && $_GET['action']=='delete') {
-            $deleted = $nd_mysql->deletePage($_GET['p']);
+            $deleted = $nd_sqlite->deletePage($_GET['p']);
         } ?>
 
         <section id="admin-content">
@@ -102,7 +105,7 @@ $nd_mysql->checkDatabase(); ?>
                             </thead>
                             <tbody>
                             <?php 
-                            $pages = $nd_mysql->getPagesInfo($getContent=false);
+                            $pages = $nd_sqlite->getPagesInfo($getContent=false);
 
                             if($pages) {
                                 foreach ($pages as $page) { ?>
