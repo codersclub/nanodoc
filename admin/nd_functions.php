@@ -1,4 +1,5 @@
 <?php
+define('ABSPATH', dirname(dirname(__FILE__)));
 
 function start_login_session() {
 	session_name('nanodoc_login');
@@ -26,3 +27,13 @@ function text_for_id($text) {
 	$idText = preg_replace('/[^A-Za-z0-9]/', '-', $text);
 	return $idText;
 }
+
+function load_theme($themeName) {
+    
+    require_once ABSPATH . "/themes/{$themeName}/index.php";
+}
+
+function goto_install() {
+    header('Location: config/install.php');
+}
+

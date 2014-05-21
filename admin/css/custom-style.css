@@ -84,6 +84,6 @@ textarea.form-control {
     float: right;
 }
 
-#admin-content .table td:last-child, #user-update-form > .table th {
+#admin-content .table td:last-child, .table th {
     white-space: nowrap;
 }

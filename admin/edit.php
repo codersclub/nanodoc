@@ -109,10 +109,10 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                 <div class="panel-body">
 
                 <?php if (isset($_POST['page_title']) && isset($_POST['page_content'])) { 
-                    $created = $nd_sqlite->addPage($_POST['page_title'], $_POST['page_content'], $_SESSION['login']);
+                    $nd_sqlite->addPage($_POST['page_title'], $_POST['page_content'], $_SESSION['login']);
                 } ?>
 
-                <?php if (!empty($created)) { ?>
+                <?php if (!empty($_GET['action'])) { ?>
 
                     <div class="alert alert-success alert-dismissable">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

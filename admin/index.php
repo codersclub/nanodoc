@@ -105,7 +105,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                             </thead>
                             <tbody>
                             <?php 
-                            $pages = $nd_sqlite->getPagesInfo($getContent=false);
+                            $pages = $nd_sqlite->getPages(false, 'all');
 
                             if($pages) {
                                 foreach ($pages as $page) { ?>

@@ -65,14 +65,20 @@ class nd_db {
         
     }
 
-    public function getPagesInfo($getContent = true) {
+    public function getPages($getContent = true, $numberOfPages) {
 
         try {
 
             $sqlite = new PDO('sqlite:' . $this->dbFilePath);
             $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $result = $sqlite->query("SELECT page_id, user_login, page_content, page_name, page_url, page_date FROM pages, users WHERE page_author = user_id");
+            if (is_int($numberOfPages)) {
+                $result = $sqlite->query("SELECT page_id, user_login, page_content, page_name, page_url, page_date FROM pages, users WHERE page_author = user_id LIMIT {$numberOfPages}");        
+            }
+            elseif ($numberOfPages = 'all') {
+                $result = $sqlite->query("SELECT page_id, user_login, page_content, page_name, page_url, page_date FROM pages, users WHERE page_author = user_id");
+            }
+            
 
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 if($getContent) {
@@ -176,7 +182,7 @@ class nd_db {
             $stmt->bindParam(':page_url', $pageUrl['nd_url']);
             $stmt->execute();
 
-            return true;
+            return header("Location: " . $_SERVER['REQUEST_URI'] . '?p=' . $pageId['seq']);
         } catch (PDOException $e) {
             die($e->getMessage());
         }

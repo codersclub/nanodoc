@@ -1,8 +1,9 @@
 <?php 
+require_once "admin/nd_functions.php";
 
 if (file_exists('nanodoc.sq3')) {
-	require_once 'themes/default/index.php';
+	load_theme('default');
 } else {
-	header('Location: config/install.php');
+	goto_install();
 }
 ?>
