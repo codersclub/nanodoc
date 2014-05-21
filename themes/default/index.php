@@ -1,19 +1,8 @@
-<?php require_once 'header.php'; ?>
+<?php
+require_once ABSPATH . '/themes/default/functions.php';
 
+get_header();
 
+get_content('all');
 
-
-
-
-
-<?php require_once 'content.php'; ?>
-
-
-
-
-
-
-
-
-
-<?php require_once 'footer.php'; ?>
+get_footer();

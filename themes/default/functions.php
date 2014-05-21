@@ -112,30 +112,29 @@ function get_content($numberOfPages) {
 
             </div>
 
-            <div class="col-md-3">
-                <div id="toc" class="bs-docs-sidebar">
-                    <ul class="nav">
-                        
-                        <?php if ($pages) {
-                            foreach ($pages as $page) { ?>
-
-                                <li><a href="#<?php echo text_for_id($page['page_name']); ?>"><?php echo $page['page_name']; ?></a></li>
-
-                            <?php }
-                        } ?>
-                        
-                    </ul>
-                    <a class="back-to-top" href="#top">Back to top</a>
-                </div>
-            </div>
+            <?php get_toc($pages); ?>
 
         </div>
     </section>
 <?php }
 
-function get_toc() {
-    
-}
+function get_toc($pages) { ?>
+
+    <div class="col-md-3">
+        <div id="toc" class="bs-docs-sidebar">
+            <ul class="nav">                    
+                <?php if ($pages) {
+                    foreach ($pages as $page) { ?>
+
+                        <li><a href="#<?php echo text_for_id($page['page_name']); ?>"><?php echo $page['page_name']; ?></a></li>
+
+                    <?php }
+                } ?>    
+            </ul>
+            <a class="back-to-top" href="#top">Back to top</a>
+        </div>
+    </div>
+ <?php }
 
 function get_categories() {
     
