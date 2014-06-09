@@ -1,11 +1,9 @@
 <?php
-require_once 'nd_functions.php';
+require_once '../nd_functions.php'; 
 check_login_session();
 
-require_once 'nd_class_db.php';
-
-if (file_exists(ABSPATH . '/nanodoc.sq3')) {
-    $nd_sqlite = new nd_db;
+if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
+    $nd_sqlite = get_database();
     $nd_sqlite->checkDatabase();
 } else {
     header('Location: ../config/install.php');
@@ -76,25 +74,17 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                 <div class="panel-body">
 
                 <?php if (isset($_GET['action']) && isset($_POST['user-email']) && isset($_POST['user-name']) && isset($_POST['user-pass']) && $_GET['action']=='user-update') {
-                    $updated = $nd_sqlite->updateUser($_SESSION['login'], $_POST['user-email'], $_POST['user-pass'], $_POST['user-name']); ?>
+                    $nd_sqlite->updateUser($_SESSION['login'], $_POST['user-email'], $_POST['user-pass'], $_POST['user-name']); 
+                    } ?>
 
-                    <?php if ($updated) { ?>
+                    <?php if (isset($_GET['action']) && $_GET['action']=='user-update') { ?>
 
                         <div class="alert alert-success alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                             <p>User Updated</p>
                         </div>
 
-                    <?php } else { ?>
-
-                        <div class="alert alert-success alert-danger">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <p>Error: Please Enter New Password</p>
-                        </div>
-
                     <?php } ?>
-
-                <?php } ?> 
 
                     <form id="user-update-form" action="user.php?action=user-update" method="post">
                         <div class="table-responsive">

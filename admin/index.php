@@ -1,11 +1,9 @@
 <?php
-require_once 'nd_functions.php'; 
+require_once '../nd_functions.php'; 
 check_login_session();
 
-require_once 'nd_class_db.php';
-
-if (file_exists(ABSPATH . '/nanodoc.sq3')) {
-    $nd_sqlite = new nd_db;
+if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
+    $nd_sqlite = get_database();
     $nd_sqlite->checkDatabase();
 } else {
     header('Location: ../config/install.php');

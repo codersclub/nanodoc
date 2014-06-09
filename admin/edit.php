@@ -1,11 +1,12 @@
 <?php
-require_once 'nd_functions.php'; 
+require_once '../nd_functions.php'; 
 check_login_session();
 
-require_once 'nd_class_db.php';
+require_once 'lib/Parsedown.php';
+$markdown = new Parsedown();
 
-if (file_exists(ABSPATH . '/nanodoc.sq3')) {
-    $nd_sqlite = new nd_db;
+if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
+    $nd_sqlite = get_database();
     $nd_sqlite->checkDatabase();
 } else {
     header('Location: ../config/install.php');
@@ -98,8 +99,10 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                         <h4>Page Title</h4>
                         <input type="text" class="form-control" name="page_title" placeholder="Title" value="<?php echo $page['page_name'] ?>" required>
                         <h4>Page Content</h4>
+
                         <textarea name="page_content" cols="30" rows="10" class="form-control"><?php echo $page['page_content']; ?></textarea>
                         <button type="submit" name="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                        <a class="btn btn-primary btn-lg" id="markdown-help" target="_blank" href="https://guides.github.com/features/mastering-markdown/">Help with markdown ?</a>
                     </form>
                 </div>
 
@@ -127,6 +130,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                         <h4>Page Content</h4>
                         <textarea name="page_content" cols="30" rows="10" class="form-control"><?php echo isset($_POST['page_content']) ? $_POST['page_content'] : "" ; ?></textarea>
                         <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                        <a class="btn btn-primary btn-lg" id="markdown-help" target="_blank" href="https://guides.github.com/features/mastering-markdown/">Help with markdown ?</a>
                     </form>
                 </div>
 

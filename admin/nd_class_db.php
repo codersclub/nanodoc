@@ -102,12 +102,12 @@ class nd_db {
             $sqlite = new PDO('sqlite:' . $this->dbFilePath);
             $sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $stmt = $sqlite->prepare("SELECT page_name, page_content, page_url, page_date FROM pages WHERE page_id = :id");
+            $stmt = $sqlite->prepare("SELECT page_id, page_name, user_login, page_author, page_content, page_url, page_date FROM pages, users WHERE page_id = :id AND page_author = user_id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
             $page = $stmt->fetch(PDO::FETCH_ASSOC);
-
+            
             $sqlite = NULL;
 
             return $page;
@@ -242,7 +242,7 @@ class nd_db {
             $stmt->bindParam(':userLogin', $userLogin);
             $stmt->execute();
 
-            return true;
+            return header("Location: " . $_SERVER['REQUEST_URI']);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
@@ -306,7 +306,7 @@ class nd_db {
 
             $sqlite = NULL;
 
-            return true;
+            return header("Location: " . $_SERVER['REQUEST_URI']);
         } catch (PDOException $e) {
             die($e->getMessage());
         }

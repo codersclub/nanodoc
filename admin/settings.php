@@ -1,11 +1,9 @@
 <?php
-require_once 'nd_functions.php';
+require_once '../nd_functions.php'; 
 check_login_session();
 
-require_once 'nd_class_db.php';
-
-if (file_exists(ABSPATH . '/nanodoc.sq3')) {
-    $nd_sqlite = new nd_db;
+if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
+    $nd_sqlite = get_database();
     $nd_sqlite->checkDatabase();
 } else {
     header('Location: ../config/install.php');
@@ -30,6 +28,7 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
           <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
+    <body>
         <header id="admin-header" class="navbar navbar-default navbar-static-top">
             <div class="container"> 
                 <div class="navbar-header">
@@ -76,25 +75,18 @@ if (file_exists(ABSPATH . '/nanodoc.sq3')) {
                 <div class="panel-body">
 
                 <?php if (isset($_GET['action']) && isset($_POST['nd_title']) && isset($_POST['nd_description']) && $_GET['action']=='settings-update') {
-                    $updated = $nd_sqlite->updateOptions($_POST['nd_title'], $_POST['nd_description']); ?>
+                    $nd_sqlite->updateOptions($_POST['nd_title'], $_POST['nd_description']); 
+                } ?>
+                
+                <?php if (isset($_GET['action']) && $_GET['action']=='settings-update') { ?>
 
-                    <?php if ($updated) { ?>
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <p>Settings updated</p>
+                    </div>
 
-                        <div class="alert alert-success alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <p>Settings updated</p>
-                        </div>
-
-                    <?php } else { ?>
-
-                        <div class="alert alert-success alert-danger">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <p>Error: Please Enter A Title</p>
-                        </div>
-
-                    <?php } ?>
-
-                <?php } ?> 
+                <?php } ?>
+ 
 
                     <form id="settings-update-form" action="settings.php?action=settings-update" method="post">
                         <div class="table-responsive">

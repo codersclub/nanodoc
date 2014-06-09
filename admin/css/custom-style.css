@@ -87,3 +87,7 @@ textarea.form-control {
 #admin-content .table td:last-child, .table th {
     white-space: nowrap;
 }
+
+#markdown-help {
+    float: right;
+}
