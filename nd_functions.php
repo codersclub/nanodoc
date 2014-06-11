@@ -31,7 +31,7 @@ function text_for_id($text) {
 
 function load_theme($themeName) {
     global $config;
-    require_once $config['abspath'] . "/themes/{$themeName}/index.php";
+    require_once $config['themespath'] . "/{$themeName}/index.php";
 }
 
 function goto_install() {
@@ -40,7 +40,7 @@ function goto_install() {
 
 function get_database() {
     global $config;
-    require_once $config['abspath'] . '/admin/nd_class_db.php';
+    require_once $config['adminpath'] . '/nd_class_db.php';
     $nd_sqlite = new nd_db;
     return $nd_sqlite;
 }
@@ -48,5 +48,5 @@ function get_database() {
 function get_template_part($part) {
     global $config;
     $nd_sqlite = get_database();
-    require_once $config['abspath'] . "/themes/default/{$part}.php";
+    require_once $config['themespath'] . "/default/{$part}.php";
 }

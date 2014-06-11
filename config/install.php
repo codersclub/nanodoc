@@ -1,4 +1,4 @@
-<?php require_once 'setup_functions.php'; ?>
+<?php require_once 'setup_functions.php';?>
 
 <!DOCTYPE html>
 <html>
