@@ -91,7 +91,8 @@ function install_nanodoc() {
             echo "<a class=\"btn btn-primary btn-lg\" href=\"install.php?step=1\">Try again</a>";
         } else {
             sqlite3_create_table($nd_title, $nd_user, $nd_pass, $nd_user_email);
-            $config['abspath'] = $_SERVER['DOCUMENT_ROOT'];
+//vot       $config['abspath'] = $_SERVER['DOCUMENT_ROOT'];
+/*vot*/     $config['abspath'] = str_replace('\\','/',dirname(__FILE__));
             $config['adminpath'] = $config['abspath'] . '/admin';
             $config['themespath'] = $config['abspath'] . '/themes';
 
