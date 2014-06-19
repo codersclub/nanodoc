@@ -49,10 +49,12 @@ class nd_db {
 
                 $sqlite = NULL;
 
-                start_login_session();
+//vot                start_login_session();
                 $_SESSION['login'] = $row['user_login'];
 
-                return header("Location: admin/");
+//vot                return header("Location: admin/");
+/*vot*/                return '';
+
 
             } catch (PDOException $e) {
                 die($e->getMessage());
