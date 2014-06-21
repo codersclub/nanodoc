@@ -8,6 +8,13 @@ if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
     header('Location: ../config/install.php');
 }
 
+/*vot*/ $error = '';
+/*vot*/ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+/*vot*/     $error = $nd_sqlite->checkLogin($_POST['nd_user'], $_POST['nd_pass']);
+/*vot*/     if(!$error) {
+/*vot*/        header("Location: admin/");
+/*vot*/	    }
+/*vot*/ }
 ?>
 
 <!DOCTYPE html>
@@ -35,12 +42,10 @@ if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
                 <p>Username<input type="text" class="form-control" name="nd_user" placeholder="Username" value="<?php echo isset($_POST['nd_user']) ? $_POST['nd_user'] : '' ; ?>" required autofocus></p>
                 <p>Password<input type="password" class="form-control" name="nd_pass" placeholder="Password" required></p>
 
-                <?php if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+/*vot*/				if($error) {
 
-                    $error = $nd_sqlite->checkLogin($_POST['nd_user'], $_POST['nd_pass']);
-
-                    echo "<span class='help-block'>$error</span>";
-                } ?>
+                        echo "<span class='help-block'>$error</span>";
+/*vot*/				}
 
                 <button type="submit" class="btn btn-primary btn-lg">Login</button>
             </form>
