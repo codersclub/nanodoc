@@ -103,4 +103,3 @@ function install_nanodoc() {
 }
 
 
- ?>

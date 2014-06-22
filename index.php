@@ -7,4 +7,3 @@ if (file_exists('nanodoc.sq3')) {
 } else {
 	goto_install();
 }
-?>
