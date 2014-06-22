@@ -7,7 +7,17 @@ if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
     $nd_sqlite->checkDatabase();
 } else {
     header('Location: ../config/install.php');
-} ?>
+}
+
+if (isset($_GET['action']) && $_GET['action']=='logout') {
+    end_login_session();
+}
+
+if (isset($_GET['action']) && $_GET['action']=='delete') {
+    $deleted = $nd_sqlite->deletePage($_GET['p']);
+}
+
+?>
 
 <!DOCTYPE html>
 <html>
@@ -68,14 +78,6 @@ if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
             </div>
         </header>
         
-        <?php if (isset($_GET['action']) && $_GET['action']=='logout') {
-            end_login_session();
-        } ?>
-    
-        <?php if (isset($_GET['action']) && $_GET['action']=='delete') {
-            $deleted = $nd_sqlite->deletePage($_GET['p']);
-        } ?>
-
         <section id="admin-content">
             <div id="pages" class="panel panel-primary">
                 <div class="panel-heading">Your pages</div>

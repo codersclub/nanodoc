@@ -63,7 +63,7 @@ EndOfSQL;
 
         $sqlite->exec($sql);
 
-        echo "<p>Nanodoc installed succesfully. You can login now and create your first page</p>";
+        echo "<p>Nanodoc installed succesfully.<br/>You can login now and create your first page</p>";
         echo "<a class=\"btn btn-primary btn-lg\" href=\"../login.php\">Login</a>"; 
 
         $sqlite= NULL;
@@ -92,11 +92,12 @@ function install_nanodoc() {
         } else {
             sqlite3_create_table($nd_title, $nd_user, $nd_pass, $nd_user_email);
 //vot       $config['abspath'] = $_SERVER['DOCUMENT_ROOT'];
-/*vot*/     $config['abspath'] = str_replace('\\','/',dirname(__FILE__));
+/*vot*/     $config['abspath'] = str_replace('\\','/',dirname(dirname(__FILE__)));
             $config['adminpath'] = $config['abspath'] . '/admin';
             $config['themespath'] = $config['abspath'] . '/themes';
 
-            file_put_contents($config['abspath'] . '/nd_config.json', json_encode($config));
+//vot            file_put_contents($config['abspath'] . '/config/nd_config.json', json_encode($config));
+            file_put_contents('./nd_config.json', json_encode($config));
         }
     }
 }

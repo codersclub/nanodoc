@@ -42,10 +42,9 @@ if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
                 <p>Username<input type="text" class="form-control" name="nd_user" placeholder="Username" value="<?php echo isset($_POST['nd_user']) ? $_POST['nd_user'] : '' ; ?>" required autofocus></p>
                 <p>Password<input type="password" class="form-control" name="nd_pass" placeholder="Password" required></p>
 
-/*vot*/				if($error) {
-
+<?/*vot*/	if($error) {
                         echo "<span class='help-block'>$error</span>";
-/*vot*/				}
+/*vot*/		} ?>
 
                 <button type="submit" class="btn btn-primary btn-lg">Login</button>
             </form>

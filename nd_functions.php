@@ -1,11 +1,39 @@
 <?php
 /*vot*/ session_start();
 
-/*vot*/define('DOC_ROOT',str_replace('\\','/',dirname(__FILE__)));
+/*vot*/define('ROOT_DIR',str_replace('\\','/',dirname(__FILE__)));
+/*vot*/$url = dirname($_SERVER['PHP_SELF']);
+/*vot*/$url = preg_replace("/\/admin$/",'/',$url);
+/*vot*/define('ROOT_URL',$url);
 //DEBUG
-//echo DOC_ROOT;
+//echo '<pre>';
+//echo 'ROOT_DIR=', ROOT_DIR, "\n";
+//echo 'ROOT_URL=', ROOT_URL, "\n";
+//echo 'Check for file=', ROOT_DIR . '/nanodoc.sq3', "\n";
+//echo 'Check for file=', ROOT_DIR . '/config/nd_config.json', "\n";
+//echo 'SERVER=';
+//print_r($_SERVER);
+//echo '</pre>';
 
-$config = json_decode(file_get_contents(DOC_ROOT."/nd_config.json"), true);
+/*vot*/ if (file_exists(ROOT_DIR . '/nanodoc.sq3') && file_exists(ROOT_DIR . '/config/nd_config.json')) {
+//DEBUG
+//echo 'Reading config...', "\n";
+            $config = json_decode(file_get_contents(ROOT_DIR . "/config/nd_config.json"), true);
+/*vot*/     $nd_sqlite = get_database();
+/*vot*/     $nd_sqlite->checkDatabase();
+/*vot*/ } else {
+//DEBUG
+//echo 'Redirect to config/install.php...', "\n";
+/*vot*/     header('Location: ' . ROOT_URL . '/config/install.php');
+/*vot*/     exit;
+/*vot*/ }
+
+//DEBUG
+//echo '<pre>';
+//echo 'config=';
+//print_r($config);
+//echo '</pre>';
+
 
 function start_login_session() {
 //vot	session_name('nanodoc_login');

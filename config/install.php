@@ -25,7 +25,7 @@
             
     <?php if (file_exists('../nanodoc.sq3')) { ?>
         
-            <p>Nanodoc is already installed. You can login now.</p>
+            <p>Nanodoc is already installed.<br/>You can login now.</p>
             <a class="btn btn-primary btn-lg" href="../login.php">Login</a>
 
         <?php } elseif (!empty($_GET['step'])) { ?>
@@ -69,7 +69,7 @@
 
     <?php } else { // end elseif empty ?>
 
-            <p>You must create a database file first. Please click on Create Database</p>
+            <p>You must create a database file first.<br/>Please click on "Create Database"</p>
             <a class="btn btn-primary btn-lg" href="install.php?step=1">Create Database</a>
 
     <?php } ?>
