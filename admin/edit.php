@@ -4,14 +4,7 @@ check_login_session();
 
 require_once 'lib/Parsedown.php';
 $markdown = new Parsedown();
-
-if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
-    $nd_sqlite = get_database();
-    $nd_sqlite->checkDatabase();
-} else {
-    header('Location: ../config/install.php');
-} ?>
-
+?>
 <!DOCTYPE html>
 <html>
     <head>

@@ -1,14 +1,7 @@
 <?php
 require_once '../nd_functions.php'; 
 check_login_session();
-
-if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
-    $nd_sqlite = get_database();
-    $nd_sqlite->checkDatabase();
-} else {
-    header('Location: ../config/install.php');
-} ?>
-
+?>
 <!DOCTYPE html>
 <html>
     <head>

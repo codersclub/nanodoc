@@ -1,13 +1,6 @@
 <?php
 require_once 'nd_functions.php';
 
-if (file_exists($config['abspath'] . '/nanodoc.sq3')) {
-    $nd_sqlite = get_database();
-    $nd_sqlite->checkDatabase();
-} else {
-    header('Location: ../config/install.php');
-}
-
 /*vot*/ $error = '';
 /*vot*/ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 /*vot*/     $error = $nd_sqlite->checkLogin($_POST['nd_user'], $_POST['nd_pass']);
