@@ -117,7 +117,7 @@ $markdown = new Parsedown();
 
                 <?php } ?>
 
-                    <form action="edit.php" method="post">
+                    <form action="edit.php?action=add" method="post">
                         <h4>Page Title</h4>
                         <input type="text" class="form-control" name="page_title" placeholder="Title" value="<?php echo isset($_POST['page_title']) ? $_POST['page_title'] : "" ; ?>" required>
                         <h4>Page Content</h4>

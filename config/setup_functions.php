@@ -97,7 +97,7 @@ function install_nanodoc() {
             $config['themespath'] = $config['abspath'] . '/themes';
 
 //vot            file_put_contents($config['abspath'] . '/config/nd_config.json', json_encode($config));
-            file_put_contents('./nd_config.json', json_encode($config));
+/*vot*/          file_put_contents('./nd_config.json', json_encode($config));
         }
     }
 }

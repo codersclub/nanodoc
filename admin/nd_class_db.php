@@ -132,7 +132,7 @@ class nd_db {
 
             $sqlite = NULL;
 
-            return header("Location: " . $_SERVER['REQUEST_URI']);
+//vot            return header("Location: " . $_SERVER['REQUEST_URI']);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
@@ -184,7 +184,7 @@ class nd_db {
             $stmt->bindParam(':page_url', $pageUrl['nd_url']);
             $stmt->execute();
 
-            return header("Location: " . $_SERVER['REQUEST_URI'] . '?p=' . $pageId['seq']);
+//vot            return header("Location: " . $_SERVER['REQUEST_URI'] . '?p=' . $pageId['seq']);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
@@ -244,7 +244,7 @@ class nd_db {
             $stmt->bindParam(':userLogin', $userLogin);
             $stmt->execute();
 
-            return header("Location: " . $_SERVER['REQUEST_URI']);
+//vot            return header("Location: " . $_SERVER['REQUEST_URI']);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
@@ -308,7 +308,7 @@ class nd_db {
 
             $sqlite = NULL;
 
-            return header("Location: " . $_SERVER['REQUEST_URI']);
+//vot            return header("Location: " . $_SERVER['REQUEST_URI']);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
