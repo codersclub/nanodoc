@@ -95,7 +95,7 @@ $markdown = new Parsedown();
 
                         <textarea name="page_content" cols="30" rows="10" class="form-control"><?php echo $page['page_content']; ?></textarea>
                         <button type="submit" name="submit" class="btn btn-primary btn-lg">Save Changes</button>
-                        <a class="btn btn-primary btn-lg" id="markdown-help" target="_blank" href="https://guides.github.com/features/mastering-markdown/">Help with markdown ?</a>
+                        <a class="btn btn-primary btn-lg" id="markdown-help" target="_blank" href="mastering-markdown/">Help with markdown ?</a>
                     </form>
                 </div>
 
@@ -123,7 +123,7 @@ $markdown = new Parsedown();
                         <h4>Page Content</h4>
                         <textarea name="page_content" cols="30" rows="10" class="form-control"><?php echo isset($_POST['page_content']) ? $_POST['page_content'] : "" ; ?></textarea>
                         <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
-                        <a class="btn btn-primary btn-lg" id="markdown-help" target="_blank" href="https://guides.github.com/features/mastering-markdown/">Help with markdown ?</a>
+                        <a class="btn btn-primary btn-lg" id="markdown-help" target="_blank" href="mastering-markdown/">Help with markdown ?</a>
                     </form>
                 </div>
 
