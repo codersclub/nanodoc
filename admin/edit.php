@@ -40,25 +40,30 @@ $markdown = new Parsedown();
                             <span class="glyphicon glyphicon-home"></span>
                             <p><a href="<?php echo $nd_sqlite->getOption('nd_url'); ?>"><?php echo $nd_sqlite->getOption('nd_title'); ?></a></p>
                         </li>
-                        <li class="admin-page-name">
+                        <li class="admin-page-name navbar-left">
                             <span class="glyphicon glyphicon-cog"></span>
                             <p><a href="index.php">Nanodoc Dashboard</a></p>
                         </li>
-                        <ul class="admin-welcome nav navbar-nav navbar-right">
-                            <li class="dropdown">
+                        <li class="admin-settings navbar-left">
+                            <span class="glyphicon glyphicon-cog"></span>
+                            <p><a href="settings.php">Settings</a></p>
+                        </li>
+                        <li class="admin-welcome navbar-right">
+                        <!--ul class="admin-welcome nav navbar-nav navbar-right"-->
+                            <ul class="dropdown">
                                 <span class="glyphicon glyphicon-user"></span><br>
                                 Welcome, 
                                 <a href="#" data-toggle="dropdown" class="dropdown-toggle">                     
-                                    <?php echo $_SESSION['login'];?>
+                                    <?php echo $_SESSION['login']; ?>
                                     <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-left">
                                     <li><a href="user.php">Account</a></li>
-                                    <li><a href="settins.php">Settings</a></li>
                                     <li><a href="index.php?action=logout">Logout</a></li>
                                 </ul>
-                            </li>
-                        </ul>   
+                            </ul>
+                        <!--/ul-->   
+                        </li>
                     </ul>       
                 </div>
             </div>

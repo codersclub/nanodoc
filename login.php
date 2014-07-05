@@ -30,7 +30,9 @@ require_once 'nd_functions.php';
         <![endif]-->
     </head>
     <body>
-        <div class="login">
+        <div class="login panel panel-primary">
+            <div class="panel-heading">Login form</div>
+            <div class="panel-body">
             <form action="login.php" id="login-form" method="post">
                 <p>Username<input type="text" class="form-control" name="nd_user" placeholder="Username" value="<?php echo isset($_POST['nd_user']) ? $_POST['nd_user'] : '' ; ?>" required autofocus></p>
                 <p>Password<input type="password" class="form-control" name="nd_pass" placeholder="Password" required></p>
@@ -41,6 +43,8 @@ require_once 'nd_functions.php';
 
                 <button type="submit" class="btn btn-primary btn-lg">Login</button>
             </form>
+            </div>
+            </div>
         </div>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="libs/jquery/1.11.0/jquery.min.js"></script>

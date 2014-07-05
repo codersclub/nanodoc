@@ -22,7 +22,7 @@
     width: 300px;
     margin: auto;
     margin-top: 8%;
-    padding-bottom: 78px;
+/*vot    padding-bottom: 78px;*/
 }
 
 #login-form > button, .config > a, .config button, #user-update-form button, #settings-update-form button {
@@ -42,7 +42,14 @@ textarea.form-control {
     padding-top: 10px;
 }
 
-.admin-title a, .admin-welcome > a {
+.admin-title, .admin-welcome, .admin-page-name, .admin-settings {
+	padding: 0 2em;
+	border-right: 1px solid #DDD;
+}
+.admin-welcome {
+	border-right: none;
+}
+.admin-title a, .admin-welcome > a, .admin-settings > a {
 
 }
 
