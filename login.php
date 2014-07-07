@@ -19,9 +19,9 @@ require_once 'nd_functions.php';
         <title><?php echo $nd_sqlite->getOption('nd_title') . ' &rsaquo; login'; ?></title>
 
         <!-- Bootstrap -->
-/*vot*/ <link href="<?php echo ROOT_URL . "/admin/css/bootstrap.min.css"; ?>" rel="stylesheet">
+<!--vot--><link href="<?php echo ROOT_URL . "/admin/css/bootstrap.min.css"; ?>" rel="stylesheet">
         <!-- NannoDoc custom css -->
-/*vot*/ <link rel="stylesheet" href="<?php echo ROOT_URL . "/admin/css/custom-style.css"; ?>">
+<!--vot--><link rel="stylesheet" href="<?php echo ROOT_URL . "/admin/css/custom-style.css"; ?>">
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -49,6 +49,6 @@ require_once 'nd_functions.php';
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
-/*vot*/ <script src="<?php echo ROOT_URL . "/libs/bootstrap/3.1.1/bootstrap.min.js"; ?>"></script>
+<!--vot--><script src="<?php echo ROOT_URL . "/libs/bootstrap/3.1.1/bootstrap.min.js"; ?>"></script>
     </body>
 </html>
