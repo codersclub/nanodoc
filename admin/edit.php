@@ -38,7 +38,7 @@ $markdown = new Parsedown();
                     <ul class="nav">
                         <li class="admin-title navbar-left">
                             <span class="glyphicon glyphicon-home"></span>
-                            <p><a href="<?php echo $nd_sqlite->getOption('nd_url'); ?>"><?php echo $nd_sqlite->getOption('nd_title'); ?></a></p>
+                            <p><a href="<?php echo ROOT_URL . '/'; ?>"><?php echo $nd_sqlite->getOption('nd_title'); ?></a></p>
                         </li>
                         <li class="admin-page-name navbar-left">
                             <span class="glyphicon glyphicon-cog"></span>

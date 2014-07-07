@@ -7,11 +7,11 @@
         <title><?php echo $nd_sqlite->getOption('nd_title'); ?></title>
 
         <!-- Bootstrap -->
-        <link href="<?php echo $nd_sqlite->getOption('nd_url') . 'admin/css/bootstrap.min.css'; ?>" rel="stylesheet">
+        <link href="<?php echo ROOT_URL . '/admin/css/bootstrap.min.css'; ?>" rel="stylesheet">
         <!-- NannoDoc custom css -->
-        <link rel="stylesheet" href="<?php echo $nd_sqlite->getOption('nd_url') . 'admin/css/bs-docs.css'; ?>">
+        <link rel="stylesheet" href="<?php echo ROOT_URL . '/admin/css/bs-docs.css'; ?>">
         <!-- Deafult theme css -->
-        <link rel="stylesheet" href="<?php echo $nd_sqlite->getOption('nd_url') . 'themes/default/css/style.css'; ?>">
+        <link rel="stylesheet" href="<?php echo ROOT_URL . '/themes/default/css/style.css'; ?>">
         <style>
 
 
@@ -32,7 +32,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="<?php echo $nd_sqlite->getOption('nd_url'); ?>" class="navbar-brand"><?php echo $nd_sqlite->getOption('nd_title'); ?></a>
+                <a href="<?php echo ROOT_URL . '/'; ?>" class="navbar-brand"><?php echo $nd_sqlite->getOption('nd_title'); ?></a>
             </div>
 
             <div id="default-header" class="collapse navbar-collapse" role="navigation">

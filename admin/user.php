@@ -35,7 +35,7 @@ check_login_session();
                     <ul class="nav">
                         <li class="admin-title navbar-left">
                             <span class="glyphicon glyphicon-home"></span>
-                            <p><a href="<?php echo $nd_sqlite->getOption('nd_url'); ?>"><?php echo $nd_sqlite->getOption('nd_title'); ?></a></p>
+                            <p><a href="<?php echo ROOT_URL . '/'; ?>"><?php echo $nd_sqlite->getOption('nd_title'); ?></a></p>
                         </li>
                         <li class="admin-page-name navbar-left">
                             <span class="glyphicon glyphicon-cog"></span>
@@ -124,6 +124,6 @@ check_login_session();
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="../libs/jquery/1.11.0/jquery.min.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="<?php echo $nd_sqlite->getOption('nd_url') . "libs/bootstrap/3.1.1/bootstrap.min.js"; ?>"></script>
+        <script src="<?php echo ROOT_URL . "/libs/bootstrap/3.1.1/bootstrap.min.js"; ?>"></script>
     </body>
 </html>
